@@ -19,7 +19,17 @@
           <div class="form-text text-danger px-2">Debe ingresar su contraseña</div>
         }
       }
-      <button class="btn btn-success btn-sm float-end mt-3" type="submit">Iniciar Sesión</button>
+      <div class="d-grid gap-2">
+        <button class="btn btn-success btn-sm mt-3" type="submit" [disabled]="loading">
+          @if (loading) {
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          }
+          Iniciar Sesión
+        </button>
+      </div>
+      @if (mensajeErrorGeneral.length > 0) {
+        <h2 class="text-center text-danger px-2 pt-3">{{ mensajeErrorGeneral }}</h2>
+      }
     </div>
   </div>
 </form>
