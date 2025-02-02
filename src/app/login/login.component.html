@@ -1,0 +1,25 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <div class="card m-3 border-primary">
+    <h4 class="card-header text-bg-primary">Inicio de Sesión</h4>
+    <div class="card-body">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control" aria-describedby="usernameHelpBlock" placeholder="Usuario o Correo" formControlName="username"/>
+      </div>
+      @if (loginForm.controls['username'].invalid && (loginForm.controls['username'].touched || loginForm.controls['username'].dirty)) {
+        @if (loginForm.controls['username'].errors?.["required"]) {
+          <div class="form-text text-danger px-2">Debe ingresar su nombre de usuario o correo electrónico</div>
+        }
+      }
+      <div class="input-group input-group-sm mt-3">
+        <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Contraseña" formControlName="contrasenna"/>
+        <button class="btn btn-primary" type="button" (mousedown)="mostrarContrasenna()" (mouseup)="ocultarContrasenna()" (mouseleave)="ocultarContrasenna()">Mostrar</button>
+      </div>
+      @if (loginForm.controls['contrasenna'].invalid && (loginForm.controls['contrasenna'].touched || loginForm.controls['contrasenna'].dirty)) {
+        @if (loginForm.controls['contrasenna'].errors?.["required"]) {
+          <div class="form-text text-danger px-2">Debe ingresar su contraseña</div>
+        }
+      }
+      <button class="btn btn-success btn-sm float-end mt-3" type="submit">Iniciar Sesión</button>
+    </div>
+  </div>
+</form>
