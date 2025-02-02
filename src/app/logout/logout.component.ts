@@ -11,23 +11,62 @@ import { Router } from '@angular/router';
 })
 export class LogoutComponent {
   mensajeCierreSesion: string = '';
+  mensajeErrorCierreSesion: string = '';
+  loading: boolean = false;
+  sesionIniciada: boolean = false;
 
   constructor(private cognitoAuthenticationService: CognitoAuthenticationService, private router: Router) {
-    this.cerrarSesion();
+    this.validarSiSesionIniciada();
+  }
+
+  validarSiSesionIniciada() {
+    // Se asume que la sesión no está inicializada...
+    this.sesionIniciada = false;
+
+    // Se valida si la sesión está inicializada...
+    this.cognitoAuthenticationService.obtenerUsuarioActual()
+    .then((session) => {
+      this.sesionIniciada = true;
+    })
+    .catch((error) => {
+      if (error instanceof AuthError) {
+        if (error.name === 'UserUnAuthenticatedException') {
+          this.sesionIniciada = false;
+          return;
+        }
+      }
+
+      console.log('Ocurrió un error al validar si usuario tenía su sesión iniciada: ' + error);
+      this.mensajeErrorCierreSesion = 'Ocurrió un error inesperado, intente nuevamente...';
+    });
   }
 
   cerrarSesion() {
-    this.mensajeCierreSesion = 'Estamos cerrando su sesión, espere unos segundos...';
+    this.mensajeCierreSesion = '';
+    this.mensajeErrorCierreSesion = '';
+    let segundosEspera = 5;
 
+    this.loading = true;
     this.cognitoAuthenticationService.cerrarSesion()
     .then(() => {
-      this.mensajeCierreSesion = 'Sesión finalizada. Será redireccionado en 5 segundos...';
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-      }, 5000);
+      this.mensajeCierreSesion = `Sesión finalizada. Será redireccionado en ${segundosEspera} segundos...`;
+      let interval = setInterval(() => {
+        segundosEspera--;
+        this.mensajeCierreSesion = `Sesión finalizada. Será redireccionado en ${segundosEspera} segundos...`;
+
+        if (segundosEspera <= 0) {
+          clearInterval(interval);
+          this.router.navigate(['/login']);
+        }
+      }, 1000);
     })
     .catch(() => {
-        this.mensajeCierreSesion = 'Ocurrió un error inesperado, intente nuevamente...';
+        this.mensajeErrorCierreSesion = 'Ocurrió un error inesperado, intente nuevamente...';
+    })
+    .finally(() => {
+      this.loading = false;
+      // Una vez se termina de llamar al método para cerrar sesión, se vuelve a validar estado de la sesión...
+      this.validarSiSesionIniciada();
     });
   }
 }

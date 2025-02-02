@@ -1,0 +1,47 @@
+  <div class="card m-3 border-primary">
+    <h4 class="card-header text-bg-primary">Verificación de Cuenta</h4>
+    <div class="card-body">
+      <form [formGroup]="confirmarForm" (ngSubmit)="onSubmit()">
+        <div class="input-group input-group-sm">
+          <input type="hidden" readonly class="form-control" aria-describedby="usernameHelpBlock" placeholder="Nombre de Usuario" formControlName="username"/>
+        </div>
+        @if (confirmarForm.controls['username'].invalid && (confirmarForm.controls['username'].touched || confirmarForm.controls['username'].dirty)) {
+          @if (confirmarForm.controls['username'].errors?.["required"]) {
+            <div class="form-text text-danger px-2">Debe ingresar su nombre de usuario</div>
+          }
+        }
+
+        <div class="input-group input-group-sm mt">
+          <input type="text" class="form-control" aria-describedby="confirmationCodeHelpBlock" placeholder="Código de Verificación" formControlName="confirmationCode"/>
+        </div>
+        @if (confirmarForm.controls['confirmationCode'].invalid && (confirmarForm.controls['confirmationCode'].touched || confirmarForm.controls['confirmationCode'].dirty)) {
+          @if (confirmarForm.controls['confirmationCode'].errors?.["required"]) {
+            <div class="form-text text-danger px-2">Debe ingresar su código de verificación</div>
+          }
+        }
+
+        <div class="d-grid gap-2">
+          <button class="btn btn-success btn-sm mt-2" type="submit" [disabled]="loading">
+            @if (loading) {
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            }
+            Verificar Cuenta
+          </button>
+        </div>
+      </form>
+
+      <button class="btn btn-outline-secondary float-end btn-xsm mt-3" (click)="reenviarCodigoVerificacion()" [disabled]="loadingReenviarCodigo || deshabilitarReenvioCodigo">
+        @if (loadingReenviarCodigo) {
+          <span class="spinner-border spinner-border-xsm" role="status" aria-hidden="true"></span>
+        }
+        {{ textoBotonReenviar }}
+      </button>
+
+      @if (mensajeErrorGeneral.length > 0) {
+        <h2 class="text-center text-danger px-2 pt-3 text-small">{{ mensajeErrorGeneral }}</h2>
+      }
+      @if (mensajeGeneral.length > 0) {
+        <h2 class="text-center text-primary px-2 pt-3 text-small">{{ mensajeGeneral }}</h2>
+      }
+    </div>
+  </div>

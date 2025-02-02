@@ -1,6 +1,19 @@
 <div class="card m-3 border-primary">
   <h4 class="card-header text-bg-primary">Cerrar Sesión</h4>
   <div class="card-body">
-    <h4 class="text-center text-primary px-2 py-3">{{ mensajeCierreSesion }}</h4>
+    <div class="d-grid gap-2">
+      <button class="btn btn-danger btn-sm" type="button" (click)="cerrarSesion()" [disabled]="loading || !sesionIniciada">
+        @if (loading) {
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        }
+        Cerrar Sesión
+      </button>
+    </div>
+    @if (mensajeCierreSesion.length > 0) {
+      <div class="text-center text-primary px-2 pt-2">{{ mensajeCierreSesion }}</div>
+    }
+    @if (mensajeErrorCierreSesion.length > 0) {
+      <div class="text-center text-danger px-2 py-1">{{ mensajeErrorCierreSesion }}</div>
+    }
   </div>
 </div>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthError } from 'aws-amplify/auth';
 import { CognitoAuthenticationService } from '../services/cognito-authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -24,9 +25,9 @@ export class LoginComponent {
     contrasenna: this.formBuilder.control('', {
       validators: [Validators.required]
     })
-  });;
+  });
 
-  constructor(private cognitoAuthenticationService: CognitoAuthenticationService) {
+  constructor(private cognitoAuthenticationService: CognitoAuthenticationService, private router: Router) {
 
   }
 
@@ -50,21 +51,20 @@ export class LoginComponent {
     this.loading = true;
     this.cognitoAuthenticationService.iniciarSesion(this.loginForm.controls['username'].value, this.loginForm.controls['contrasenna'].value)
     .then(() => {
-      alert('Se logeó exitosamente');
+      this.router.navigate(['/logout']);
     })
     .catch((error) => {
-      console.log('Ocurrió un error al iniciar sesión: ' + error);
       if (error instanceof AuthError) {
         if (error.name === 'NotAuthorizedException') {
           this.mensajeErrorGeneral = 'Nombre de usuario y/o contraseña inválidos...'
+          return;
         } else if (error.name === 'UserAlreadyAuthenticatedException') {
           this.mensajeErrorGeneral = 'Usted ya tiene una sesión activa...'
-        } else {
-          this.mensajeErrorGeneral = 'Ocurrió un error inesperado, intente nuevamente...'
+          return;
         }
-      } else {
-        this.mensajeErrorGeneral = 'Ocurrió un error inesperado, intente nuevamente...'
       }
+      console.log('Ocurrió un error al iniciar sesión: ' + error);
+      this.mensajeErrorGeneral = 'Ocurrió un error inesperado, intente nuevamente...';
     })
     .finally(() => {
       this.loading = false;

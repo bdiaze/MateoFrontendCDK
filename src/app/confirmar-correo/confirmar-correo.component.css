@@ -1,0 +1,19 @@
+.card {
+  width: 25rem;
+}
+
+.text-small {
+  font-size: small;
+}
+
+.btn-xsm {
+  --bs-btn-padding-y: .25rem;
+  --bs-btn-padding-x: .5rem;
+  --bs-btn-font-size: .75rem;
+}
+
+.spinner-border-xsm {
+  --bs-spinner-width: 0.80rem;
+  --bs-spinner-height: 0.80rem;
+  --bs-spinner-border-width: 0.15em;
+}

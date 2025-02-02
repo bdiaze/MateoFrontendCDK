@@ -1,0 +1,76 @@
+<form [formGroup]="creacionForm" (ngSubmit)="onSubmit()">
+  <div class="card m-3 border-primary">
+    <h4 class="card-header text-bg-primary">Creación de Cuenta</h4>
+    <div class="card-body">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control" aria-describedby="usernameHelpBlock" placeholder="Nombre de Usuario" formControlName="username"/>
+      </div>
+      @if (creacionForm.controls['username'].invalid && (creacionForm.controls['username'].touched || creacionForm.controls['username'].dirty)) {
+        @if (creacionForm.controls['username'].errors?.["required"]) {
+          <div class="form-text text-danger px-2">Debe ingresar su nombre de usuario</div>
+        }
+      }
+
+      <div class="input-group input-group-sm mt-2">
+        <input type="text" class="form-control" aria-describedby="emailHelpBlock" placeholder="Correo" formControlName="email"/>
+      </div>
+      @if (creacionForm.controls['email'].invalid && (creacionForm.controls['email'].touched || creacionForm.controls['email'].dirty)) {
+        @if (creacionForm.controls['email'].errors?.["required"]) {
+          <div class="form-text text-danger px-2">Debe ingresar su correo electrónico</div>
+        }
+        @if (creacionForm.controls['email'].errors?.["email"]) {
+          <div class="form-text text-danger px-2">Formato de correo no válido</div>
+        }
+      }
+
+      <div class="input-group input-group-sm mt-2">
+        <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Contraseña" formControlName="contrasenna"/>
+        <button class="btn btn-primary" type="button" (mousedown)="mostrarContrasenna()" (mouseup)="ocultarContrasenna()" (mouseleave)="ocultarContrasenna()">Mostrar</button>
+      </div>
+      @if (creacionForm.controls['contrasenna'].invalid && (creacionForm.controls['contrasenna'].touched || creacionForm.controls['contrasenna'].dirty)) {
+        @if (creacionForm.controls['contrasenna'].errors?.["required"]) {
+          <div class="form-text text-danger px-2">Debe ingresar su contraseña</div>
+        }
+        @if (creacionForm.controls['contrasenna'].errors?.["minlength"]) {
+          <div class="form-text text-danger px-2">Su contraseña debe tener al menos 8 caracteres</div>
+        }
+        @if (creacionForm.controls['contrasenna'].errors?.["mayusculasValidator"]) {
+          <div class="form-text text-danger px-2">Su contraseña debe tener al menos una mayúscula (A - Z)</div>
+        }
+        @if (creacionForm.controls['contrasenna'].errors?.["minusculasValidator"]) {
+          <div class="form-text text-danger px-2">Su contraseña debe tener al menos una minúscula (a - z)</div>
+        }
+        @if (creacionForm.controls['contrasenna'].errors?.["numerosValidator"]) {
+          <div class="form-text text-danger px-2">Su contraseña debe tener al menos un número (0 - 9)</div>
+        }
+        @if (creacionForm.controls['contrasenna'].errors?.["simbolosValidator"]) {
+          <div class="form-text text-danger px-2">Su contraseña debe tener al menos un símbolo (Ej: $ % ? .)</div>
+        }
+      }
+
+      <div class="input-group input-group-sm mt-2">
+        <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="confContrasennaHelpBlock" placeholder="Confirmar Contraseña" formControlName="confContrasenna"/>
+      </div>
+      @if (creacionForm.controls['confContrasenna'].invalid && (creacionForm.controls['confContrasenna'].touched || creacionForm.controls['confContrasenna'].dirty)) {
+        @if (creacionForm.controls['confContrasenna'].errors?.["required"]) {
+          <div class="form-text text-danger px-2">Debe confirmar su contraseña</div>
+        }
+        @if (creacionForm.controls['confContrasenna'].errors?.["passwordConfirmation"]) {
+          <div class="form-text text-danger px-2">Sus contraseñas no coinciden</div>
+        }
+      }
+
+      <div class="d-grid gap-2">
+        <button class="btn btn-success btn-sm mt-2" type="submit" [disabled]="loading">
+          @if (loading) {
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          }
+          Crear Cuenta
+        </button>
+      </div>
+      @if (mensajeErrorGeneral.length > 0) {
+        <h2 class="text-center text-danger px-2 pt-3">{{ mensajeErrorGeneral }}</h2>
+      }
+    </div>
+  </div>
+</form>

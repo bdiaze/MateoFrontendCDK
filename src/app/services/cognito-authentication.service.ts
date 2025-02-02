@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Amplify, } from 'aws-amplify';
-import { confirmSignUp, signIn, signOut, signUp } from 'aws-amplify/auth';
+import { Amplify } from 'aws-amplify';
+import { confirmSignUp, fetchAuthSession, getCurrentUser, resendSignUpCode, signIn, signOut, signUp } from 'aws-amplify/auth';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -41,5 +41,17 @@ export class CognitoAuthenticationService {
 
   confirmarCorreo(username: string, confirmationCode: string): Promise<any>{
     return confirmSignUp({ username, confirmationCode });
+  }
+
+  solicitarNuevoCodigoConfirmacion(username: string): Promise<any> {
+    return resendSignUpCode({ username });
+  }
+
+  obtenerSesionAuth() {
+    return fetchAuthSession();
+  }
+
+  obtenerUsuarioActual() {
+    return getCurrentUser();
   }
 }
