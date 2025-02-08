@@ -12,7 +12,7 @@
       }
       <div class="input-group input-group-sm mt-3">
         <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Contraseña" formControlName="contrasenna"/>
-        <button class="btn btn-primary" type="button" (mousedown)="mostrarContrasenna()" (mouseup)="ocultarContrasenna()" (mouseleave)="ocultarContrasenna()">Mostrar</button>
+        <button class="btn btn-primary" type="button" (mousedown)="mostrarContrasenna()" (mouseup)="ocultarContrasenna()" (mouseleave)="ocultarContrasenna()" tabindex="-1">Mostrar</button>
       </div>
       @if (loginForm.controls['contrasenna'].invalid && (loginForm.controls['contrasenna'].touched || loginForm.controls['contrasenna'].dirty)) {
         @if (loginForm.controls['contrasenna'].errors?.["required"]) {
@@ -28,8 +28,12 @@
         </button>
       </div>
       @if (mensajeErrorGeneral.length > 0) {
-        <h2 class="text-center text-danger px-2 pt-3">{{ mensajeErrorGeneral }}</h2>
+        <h2 class="text-center text-danger px-2 pt-2">{{ mensajeErrorGeneral }}</h2>
       }
+      <div class="mx-2 mt-2">
+        <a class="float-start" [routerLink]="['/usercreation']" routerLinkActive="router-link-active" >Crear Cuenta</a>
+        <a class="float-end" [routerLink]="['/recuperarcontrasenna']" routerLinkActive="router-link-active" >Recuperar Contraseña</a>
+      </div>
     </div>
   </div>
 </form>

@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthError } from 'aws-amplify/auth';
-import { CognitoAuthenticationService } from '../services/cognito-authentication.service';
-import { Router } from '@angular/router';
+import { AuthError, SignInOutput } from 'aws-amplify/auth';
+import { CognitoAuthenticationService } from '../../../services/cognito-authentication.service';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -48,10 +48,18 @@ export class LoginComponent {
       return;
     }
 
+    let username:string = this.loginForm.controls['username'].value;
+    let contrasenna:string = this.loginForm.controls['contrasenna'].value;
+
     this.loading = true;
-    this.cognitoAuthenticationService.iniciarSesion(this.loginForm.controls['username'].value, this.loginForm.controls['contrasenna'].value)
-    .then(() => {
-      this.router.navigate(['/logout']);
+    this.cognitoAuthenticationService.iniciarSesion(username, contrasenna)
+    .then((content: SignInOutput) => {
+      let nextStep:string = content.nextStep.signInStep;
+      if (nextStep == 'DONE') {
+        this.router.navigate(['/logout']);
+      } else if (nextStep == 'CONFIRM_SIGN_UP') {
+        this.router.navigate(['/accountverification', username]);
+      }
     })
     .catch((error) => {
       if (error instanceof AuthError) {

@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CognitoAuthenticationService } from '../services/cognito-authentication.service';
-import { Router } from '@angular/router';
-import { AuthError } from 'aws-amplify/auth';
-import { confirmedPasswordValidator, passwordStrengthValidator } from '../helpers/validators/password-confirmation';
+import { CognitoAuthenticationService } from '../../../services/cognito-authentication.service';
+import { Router, RouterModule } from '@angular/router';
+import { AuthError, SignUpOutput } from 'aws-amplify/auth';
+import { confirmedPasswordValidator, passwordStrengthValidator } from '../../../helpers/validators/password-confirmation';
 
 @Component({
   selector: 'app-creacion-usuario',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './creacion-usuario.component.html',
   styleUrl: './creacion-usuario.component.css'
 })
@@ -71,10 +71,17 @@ export class CreacionUsuarioComponent {
       return;
     }
 
+    let username:string = this.creacionForm.controls['username'].value;
+    let email:string = this.creacionForm.controls['email'].value;
+    let contrasenna:string = this.creacionForm.controls['contrasenna'].value;
+
     this.loading = true;
-    this.cognitoAuthenticationService.crearCuenta(this.creacionForm.controls['username'].value, this.creacionForm.controls['email'].value, this.creacionForm.controls['contrasenna'].value)
-    .then(() => {
-      this.router.navigate(['/accountverification', this.creacionForm.controls['username'].value]);
+    this.cognitoAuthenticationService.crearCuenta(username, email, contrasenna)
+    .then((content:SignUpOutput) => {
+      let nextStep:string = content.nextStep.signUpStep;
+      if (nextStep == 'CONFIRM_SIGN_UP') {
+        this.router.navigate(['/accountverification', username]);
+      }
     })
     .catch((error) => {
       if (error instanceof AuthError) {

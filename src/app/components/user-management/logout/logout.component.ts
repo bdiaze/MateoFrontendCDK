@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { AuthError } from 'aws-amplify/auth';
-import { CognitoAuthenticationService } from '../services/cognito-authentication.service';
-import { Router } from '@angular/router';
+import { CognitoAuthenticationService } from '../../../services/cognito-authentication.service';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-logout',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './logout.component.html',
   styleUrl: './logout.component.css'
 })

@@ -25,7 +25,7 @@
 
       <div class="input-group input-group-sm mt-2">
         <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Contraseña" formControlName="contrasenna"/>
-        <button class="btn btn-primary" type="button" (mousedown)="mostrarContrasenna()" (mouseup)="ocultarContrasenna()" (mouseleave)="ocultarContrasenna()">Mostrar</button>
+        <button class="btn btn-primary" type="button" (mousedown)="mostrarContrasenna()" (mouseup)="ocultarContrasenna()" (mouseleave)="ocultarContrasenna()" tabindex="-1">Mostrar</button>
       </div>
       @if (creacionForm.controls['contrasenna'].invalid && (creacionForm.controls['contrasenna'].touched || creacionForm.controls['contrasenna'].dirty)) {
         @if (creacionForm.controls['contrasenna'].errors?.["required"]) {
@@ -71,6 +71,9 @@
       @if (mensajeErrorGeneral.length > 0) {
         <h2 class="text-center text-danger px-2 pt-3">{{ mensajeErrorGeneral }}</h2>
       }
+      <div class="mx-2 mt-2">
+        <a class="float-start" [routerLink]="['/login']" routerLinkActive="router-link-active" >Iniciar Sesión</a>
+      </div>
     </div>
   </div>
 </form>

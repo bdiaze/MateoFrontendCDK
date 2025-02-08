@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Amplify } from 'aws-amplify';
-import { confirmSignUp, fetchAuthSession, getCurrentUser, resendSignUpCode, signIn, signOut, signUp } from 'aws-amplify/auth';
+import { confirmSignUp, fetchAuthSession, getCurrentUser, resendSignUpCode, signIn, signOut, signUp, resetPassword, confirmResetPassword } from 'aws-amplify/auth';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -54,4 +54,13 @@ export class CognitoAuthenticationService {
   obtenerUsuarioActual() {
     return getCurrentUser();
   }
+
+  solicitarCodigoRecuperacionContrasenna(username:string) {
+    return resetPassword({ username });
+  }
+
+  recuperarContrasenna(username:string, confirmationCode:string, newPassword:string) {
+    return confirmResetPassword({ username, confirmationCode, newPassword });
+  }
 }
+

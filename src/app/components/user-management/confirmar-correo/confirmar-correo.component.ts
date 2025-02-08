@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CognitoAuthenticationService } from '../services/cognito-authentication.service';
+import { CognitoAuthenticationService } from '../../../services/cognito-authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthError } from 'aws-amplify/auth';
 
@@ -51,8 +51,11 @@ export class ConfirmarCorreoComponent implements OnInit {
       return;
     }
 
+    let usename:string = this.confirmarForm.controls['username'].value;
+    let confirmationCode:string = this.confirmarForm.controls['confirmationCode'].value;
+
     this.loading = true;
-    this.cognitoAuthenticationService.confirmarCorreo(this.confirmarForm.controls['username'].value, this.confirmarForm.controls['confirmationCode'].value)
+    this.cognitoAuthenticationService.confirmarCorreo(usename, confirmationCode)
     .then(() => {
       this.router.navigate(['/login']);
     })
@@ -81,8 +84,10 @@ export class ConfirmarCorreoComponent implements OnInit {
     this.mensajeGeneral = '';
     this.mensajeErrorGeneral = '';
 
+    let username:string = this.confirmarForm.controls['username'].value;
+
     this.loadingReenviarCodigo = true;
-    this.cognitoAuthenticationService.solicitarNuevoCodigoConfirmacion(this.confirmarForm.controls['username'].value)
+    this.cognitoAuthenticationService.solicitarNuevoCodigoConfirmacion(username)
     .then(() => {
       this.mensajeGeneral = 'Código de verificación reenviado';
     })
@@ -105,11 +110,11 @@ export class ConfirmarCorreoComponent implements OnInit {
   deshabilitarBotonReenviar() {
     this.segundosEspera = 10;
     this.deshabilitarReenvioCodigo = true;
-    this.textoBotonReenviar = `[${this.segundosEspera} seg.] Reenviar código`;
+    this.textoBotonReenviar = `[${this.segundosEspera.toString().padStart(2, '0')} seg.] Reenviar código`;
 
     let interval = setInterval(() => {
       this.segundosEspera--;
-      this.textoBotonReenviar = `[${this.segundosEspera} seg.] Reenviar código`;
+      this.textoBotonReenviar = `[${this.segundosEspera.toString().padStart(2, '0')} seg.] Reenviar código`;
 
       if (this.segundosEspera <= 0) {
         clearInterval(interval);

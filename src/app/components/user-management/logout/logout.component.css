@@ -5,3 +5,7 @@
 .text-danger, .text-primary {
   font-size: small;
 }
+
+a {
+  font-size: small;
+}

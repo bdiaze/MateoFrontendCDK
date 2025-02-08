@@ -21,7 +21,7 @@
         }
 
         <div class="d-grid gap-2">
-          <button class="btn btn-success btn-sm mt-2" type="submit" [disabled]="loading">
+          <button class="btn btn-success btn-sm mt-2 mb-3" type="submit" [disabled]="loading">
             @if (loading) {
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             }
@@ -30,18 +30,19 @@
         </div>
       </form>
 
-      <button class="btn btn-outline-secondary float-end btn-xsm mt-3" (click)="reenviarCodigoVerificacion()" [disabled]="loadingReenviarCodigo || deshabilitarReenvioCodigo">
+      @if (mensajeErrorGeneral.length > 0) {
+        <h2 class="text-center text-danger mx-2 mb-3 text-small">{{ mensajeErrorGeneral }}</h2>
+      }
+      @if (mensajeGeneral.length > 0) {
+        <h2 class="text-center text-primary mx-2 mb-3 text-small">{{ mensajeGeneral }}</h2>
+      }
+
+      <button class="btn btn-outline-secondary float-end btn-xsm" (click)="reenviarCodigoVerificacion()" [disabled]="loadingReenviarCodigo || deshabilitarReenvioCodigo">
         @if (loadingReenviarCodigo) {
           <span class="spinner-border spinner-border-xsm" role="status" aria-hidden="true"></span>
         }
         {{ textoBotonReenviar }}
       </button>
 
-      @if (mensajeErrorGeneral.length > 0) {
-        <h2 class="text-center text-danger px-2 pt-3 text-small">{{ mensajeErrorGeneral }}</h2>
-      }
-      @if (mensajeGeneral.length > 0) {
-        <h2 class="text-center text-primary px-2 pt-3 text-small">{{ mensajeGeneral }}</h2>
-      }
     </div>
   </div>

@@ -15,5 +15,10 @@
     @if (mensajeErrorCierreSesion.length > 0) {
       <div class="text-center text-danger px-2 py-1">{{ mensajeErrorCierreSesion }}</div>
     }
+    @if (!sesionIniciada) {
+      <div class="mx-2 mt-2">
+        <a class="float-start" [routerLink]="['/login']" routerLinkActive="router-link-active" >Iniciar Sesión</a>
+      </div>
+    }
   </div>
 </div>
