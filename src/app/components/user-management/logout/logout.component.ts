@@ -14,12 +14,13 @@ export class LogoutComponent {
   mensajeErrorCierreSesion: string = '';
   loading: boolean = false;
   sesionIniciada: boolean = false;
+  sesionIniciadaPrincipio: boolean = false;
 
   constructor(private cognitoAuthenticationService: CognitoAuthenticationService, private router: Router) {
-    this.validarSiSesionIniciada();
+    this.validarSiSesionIniciada(true);
   }
 
-  validarSiSesionIniciada() {
+  validarSiSesionIniciada(llamadaInicial:boolean = false) {
     // Se asume que la sesión no está inicializada...
     this.sesionIniciada = false;
 
@@ -38,6 +39,11 @@ export class LogoutComponent {
 
       console.log('Ocurrió un error al validar si usuario tenía su sesión iniciada: ' + error);
       this.mensajeErrorCierreSesion = 'Ocurrió un error inesperado, intente nuevamente...';
+    })
+    .finally(() =>{
+        if (llamadaInicial) {
+            this.sesionIniciadaPrincipio = this.sesionIniciada;
+        }
     });
   }
 

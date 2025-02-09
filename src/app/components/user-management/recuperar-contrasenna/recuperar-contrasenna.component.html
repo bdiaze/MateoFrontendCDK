@@ -1,91 +1,94 @@
 <div class="card m-3 border-primary">
-  <h4 class="card-header text-bg-primary">Recuperar Contraseña</h4>
-  <div class="card-body">
-    <form [formGroup]="enviarCodigoForm" (ngSubmit)="onSubmitEnviarCodigo()">
-      <div class="input-group input-group-sm">
-        <input type="text" class="form-control" aria-describedby="usernameHelpBlock" placeholder="Nombre de Usuario o Correo" formControlName="username"/>
-        <button class="btn btn-primary" type="button" tabindex="-1" type="submit" [disabled]="loadingEnvioCodigo || deshabilitarEnvioCodigo">
-          @if (loadingEnvioCodigo) {
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          }
-          {{ textoBotonEnviar }}
-        </button>
-      </div>
-      @if (enviarCodigoForm.controls['username'].invalid && (enviarCodigoForm.controls['username'].touched || enviarCodigoForm.controls['username'].dirty)) {
-        @if (enviarCodigoForm.controls['username'].errors?.["required"]) {
-          <div class="form-text text-danger px-2 text-small">Debe ingresar su nombre de usuario o correo</div>
-        }
-      }
-      @if (mensajeGeneralEnvio.length > 0) {
-        <div class="form-text text-center text-primary mx-2 text-small">{{ mensajeGeneralEnvio }}</div>
-      }
-    </form>
+    <h4 class="card-header text-bg-primary">Recuperar Contraseña</h4>
+    <div class="card-body">
+        <form [formGroup]="enviarCodigoForm" (ngSubmit)="onSubmitEnviarCodigo()">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" aria-describedby="usernameHelpBlock" placeholder="Nombre de Usuario o Correo" formControlName="username"/>
+                <button class="btn btn-primary" type="button" tabindex="-1" type="submit" [disabled]="loadingEnvioCodigo || deshabilitarEnvioCodigo">
+                    @if (loadingEnvioCodigo) {
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    }
+                    {{ textoBotonEnviar }}
+                </button>
+            </div>
+            @if (enviarCodigoForm.controls['username'].invalid && (enviarCodigoForm.controls['username'].touched || enviarCodigoForm.controls['username'].dirty)) {
+                @if (enviarCodigoForm.controls['username'].errors?.["required"]) {
+                    <div class="form-text text-danger px-2 text-small">Debe ingresar su nombre de usuario o correo</div>
+                }
+            }
+            @if (mensajeGeneralEnvio.length > 0) {
+                <div class="form-text text-center text-primary mx-2 text-small">{{ mensajeGeneralEnvio }}</div>
+            }
+        </form>
 
-    <form [formGroup]="recuperacionForm" (ngSubmit)="onSubmit()" [ngClass]="!mostrarFormularioCodigo ? 'd-none' : ''">
-      <div class="input-group input-group-sm">
-        <input type="hidden" class="form-control" aria-describedby="usernameHelpBlock" placeholder="Nombre de Usuario o Correo" formControlName="username"/>
-      </div>
+        <form [formGroup]="recuperacionForm" (ngSubmit)="onSubmit()" [ngClass]="!mostrarFormularioCodigo ? 'd-none' : ''">
+            <div class="input-group input-group-sm">
+                <input type="hidden" class="form-control" aria-describedby="usernameHelpBlock" placeholder="Nombre de Usuario o Correo" formControlName="username"/>
+            </div>
 
-      <div class="input-group input-group-sm mt-2">
-        <input type="text" class="form-control" aria-describedby="confirmationCodeHelpBlock" placeholder="Código de Recuperación" formControlName="confirmationCode"/>
-      </div>
-      @if (recuperacionForm.controls['confirmationCode'].invalid && (recuperacionForm.controls['confirmationCode'].touched || recuperacionForm.controls['confirmationCode'].dirty)) {
-        @if (recuperacionForm.controls['confirmationCode'].errors?.["required"]) {
-          <div class="form-text text-danger px-2 text-small">Debe ingresar el código de confirmación que fue enviado a su correo</div>
-        }
-      }
+            <div class="input-group input-group-sm mt-2">
+                <input type="text" class="form-control" aria-describedby="confirmationCodeHelpBlock" placeholder="Código de Recuperación" formControlName="confirmationCode"/>
+            </div>
+            @if (recuperacionForm.controls['confirmationCode'].invalid && (recuperacionForm.controls['confirmationCode'].touched || recuperacionForm.controls['confirmationCode'].dirty)) {
+                @if (recuperacionForm.controls['confirmationCode'].errors?.["required"]) {
+                    <div class="form-text text-danger px-2 text-small">Debe ingresar el código de confirmación que fue enviado a su correo</div>
+                }
+            }
 
-      <div class="input-group input-group-sm mt-2">
-        <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Nueva Contraseña" formControlName="contrasenna"/>
-        <button class="btn btn-primary" type="button" (mousedown)="mostrarContrasenna()" (mouseup)="ocultarContrasenna()" (mouseleave)="ocultarContrasenna()" tabindex="-1">Mostrar</button>
-      </div>
-      @if (recuperacionForm.controls['contrasenna'].invalid && (recuperacionForm.controls['contrasenna'].touched || recuperacionForm.controls['contrasenna'].dirty)) {
-        @if (recuperacionForm.controls['contrasenna'].errors?.["required"]) {
-          <div class="form-text text-danger px-2 text-small">Debe ingresar su nueva contraseña</div>
-        }
-        @if (recuperacionForm.controls['contrasenna'].errors?.["minlength"]) {
-          <div class="form-text text-danger px-2 text-small">Su contraseña debe tener al menos 8 caracteres</div>
-        }
-        @if (recuperacionForm.controls['contrasenna'].errors?.["mayusculasValidator"]) {
-          <div class="form-text text-danger px-2 text-small">Su contraseña debe tener al menos una mayúscula (A - Z)</div>
-        }
-        @if (recuperacionForm.controls['contrasenna'].errors?.["minusculasValidator"]) {
-          <div class="form-text text-danger px-2 text-small">Su contraseña debe tener al menos una minúscula (a - z)</div>
-        }
-        @if (recuperacionForm.controls['contrasenna'].errors?.["numerosValidator"]) {
-          <div class="form-text text-danger px-2 text-small">Su contraseña debe tener al menos un número (0 - 9)</div>
-        }
-        @if (recuperacionForm.controls['contrasenna'].errors?.["simbolosValidator"]) {
-          <div class="form-text text-danger px-2 text-small">Su contraseña debe tener al menos un símbolo (Ej: $ % ? .)</div>
-        }
-      }
+            <div class="input-group input-group-sm mt-2">
+                <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Nueva Contraseña" formControlName="contrasenna"/>
+                <button class="btn btn-primary" type="button" (mousedown)="mostrarContrasenna()" (mouseup)="ocultarContrasenna()" (mouseleave)="ocultarContrasenna()" tabindex="-1">Mostrar</button>
+            </div>
+            @if (recuperacionForm.controls['contrasenna'].invalid && (recuperacionForm.controls['contrasenna'].touched || recuperacionForm.controls['contrasenna'].dirty)) {
+                @if (recuperacionForm.controls['contrasenna'].errors?.["required"]) {
+                    <div class="form-text text-danger px-2 text-small">Debe ingresar su nueva contraseña</div>
+                }
+                @if (recuperacionForm.controls['contrasenna'].errors?.["minlength"]) {
+                    <div class="form-text text-danger px-2 text-small">Su contraseña debe tener al menos 8 caracteres</div>
+                }
+                @if (recuperacionForm.controls['contrasenna'].errors?.["mayusculasValidator"]) {
+                    <div class="form-text text-danger px-2 text-small">Su contraseña debe tener al menos una mayúscula (A - Z)</div>
+                }
+                @if (recuperacionForm.controls['contrasenna'].errors?.["minusculasValidator"]) {
+                    <div class="form-text text-danger px-2 text-small">Su contraseña debe tener al menos una minúscula (a - z)</div>
+                }
+                @if (recuperacionForm.controls['contrasenna'].errors?.["numerosValidator"]) {
+                    <div class="form-text text-danger px-2 text-small">Su contraseña debe tener al menos un número (0 - 9)</div>
+                }
+                @if (recuperacionForm.controls['contrasenna'].errors?.["simbolosValidator"]) {
+                    <div class="form-text text-danger px-2 text-small">Su contraseña debe tener al menos un símbolo (Ej: $ % ? .)</div>
+                }
+            }
 
-      <div class="input-group input-group-sm mt-2">
-        <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="confContrasennaHelpBlock" placeholder="Confirmar Contraseña" formControlName="confContrasenna"/>
-      </div>
-      @if (recuperacionForm.controls['confContrasenna'].invalid && (recuperacionForm.controls['confContrasenna'].touched || recuperacionForm.controls['confContrasenna'].dirty)) {
-        @if (recuperacionForm.controls['confContrasenna'].errors?.["required"]) {
-          <div class="form-text text-danger px-2 text-small">Debe confirmar su contraseña</div>
-        }
-        @if (recuperacionForm.controls['confContrasenna'].errors?.["passwordConfirmation"]) {
-          <div class="form-text text-danger px-2 text-small">Sus contraseñas no coinciden</div>
-        }
-      }
+            <div class="input-group input-group-sm mt-2">
+                <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="confContrasennaHelpBlock" placeholder="Confirmar Contraseña" formControlName="confContrasenna"/>
+            </div>
+            @if (recuperacionForm.controls['confContrasenna'].invalid && (recuperacionForm.controls['confContrasenna'].touched || recuperacionForm.controls['confContrasenna'].dirty)) {
+                @if (recuperacionForm.controls['confContrasenna'].errors?.["required"]) {
+                    <div class="form-text text-danger px-2 text-small">Debe confirmar su contraseña</div>
+                }
+                @if (recuperacionForm.controls['confContrasenna'].errors?.["passwordConfirmation"]) {
+                    <div class="form-text text-danger px-2 text-small">Sus contraseñas no coinciden</div>
+                }
+            }
 
-      <div class="d-grid gap-2">
-        <button class="btn btn-success btn-sm mt-2" type="submit" [disabled]="loading">
-          @if (loading) {
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          }
-          Cambiar Contraseña
-        </button>
-      </div>
-    </form>
-    @if (mensajeErrorGeneral.length > 0) {
-      <h2 class="text-center text-danger px-2 mt-2 mb-0 text-small">{{ mensajeErrorGeneral }}</h2>
-    }
-    @if (mensajeGeneral.length > 0) {
-      <h2 class="text-center text-primary mx-2 mt-2 mb-0 text-small">{{ mensajeGeneral }}</h2>
-    }
-  </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-success btn-sm mt-2" type="submit" [disabled]="loading">
+                    @if (loading) {
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    }
+                    Cambiar Contraseña
+                </button>
+            </div>
+        </form>
+        @if (mensajeErrorGeneral.length > 0) {
+            <h2 class="text-center text-danger px-2 mt-2 mb-0 text-small">{{ mensajeErrorGeneral }}</h2>
+        }
+        @if (mensajeGeneral.length > 0) {
+            <h2 class="text-center text-primary mx-2 mt-2 mb-0 text-small">{{ mensajeGeneral }}</h2>
+        }
+        <div class="mx-2 mt-2">
+            <a class="float-start" [routerLink]="['/login']" routerLinkActive="router-link-active" >Iniciar Sesión</a>
+        </div>
+    </div>
 </div>

@@ -3,12 +3,12 @@ import { Component, inject } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { confirmedPasswordValidator, passwordStrengthValidator } from '../../../helpers/validators/password-confirmation';
 import { CognitoAuthenticationService } from '../../../services/cognito-authentication.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthError, ResetPasswordOutput } from 'aws-amplify/auth';
 
 @Component({
   selector: 'app-recuperar-contrasenna',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './recuperar-contrasenna.component.html',
   styleUrl: './recuperar-contrasenna.component.css'
 })

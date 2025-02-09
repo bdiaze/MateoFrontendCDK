@@ -18,3 +18,7 @@
   --bs-spinner-height: 0.80rem;
   --bs-spinner-border-width: 0.15em;
 }
+
+a {
+    font-size: small;
+  }

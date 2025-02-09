@@ -12,4 +12,5 @@ export const routes: Routes = [
   { path: 'usercreation', component: CreacionUsuarioComponent, title: 'Creación de Cuenta' },
   { path: 'accountverification/:username', component: ConfirmarCorreoComponent, title: 'Verificación de Cuenta' },
   { path: 'recuperarcontrasenna', component: RecuperarContrasennaComponent, title: 'Recuperar Contraseña' },
+  { path: '**', redirectTo: ''},
 ];
