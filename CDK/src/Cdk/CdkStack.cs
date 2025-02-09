@@ -54,6 +54,18 @@ namespace Cdk
                     ViewerProtocolPolicy = ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 },
                 Certificate = certificate,
+                ErrorResponses = new[] {
+                    new ErrorResponse {
+                        HttpStatus = 403,
+                        ResponseHttpStatus = 200,
+                        ResponsePagePath = rootObject,
+                    },
+                    new ErrorResponse {
+                        HttpStatus = 404,
+                        ResponseHttpStatus = 200,
+                        ResponsePagePath = rootObject,
+                    },
+                }
             });
 
             // Se crea record en hosted zone...
