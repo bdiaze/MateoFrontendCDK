@@ -35,7 +35,7 @@ jobs:
                   node-version: ${{ vars.VERSION_NODEJS }}
                   
             - name: Update environment.ts file
-              run: echo ${{ vars.ENVIRONMENT_TS }} > ${{ vars.ENVIRONMENT_TS_FILE }}
+              run: echo "${{ vars.ENVIRONMENT_TS }}" > "${{ vars.ENVIRONMENT_TS_FILE }}"
                   
             - name: Install Dependencies
               run: npm install
