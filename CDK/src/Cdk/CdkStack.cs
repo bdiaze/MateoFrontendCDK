@@ -35,6 +35,7 @@ namespace Cdk
                 Versioned = false,
                 RemovalPolicy = RemovalPolicy.DESTROY,
                 BlockPublicAccess = BlockPublicAccess.BLOCK_ALL,
+                BucketName = $"{appName}FrontendS3Bucket"
             });
 
             // Se despliegan piezas del frontend en el bucket...
@@ -45,6 +46,7 @@ namespace Cdk
 
             // Se crea distribución de cloudfront...
             Distribution distribution = new Distribution(this, $"{appName}FrontendDistribution", new DistributionProps {
+                Comment = $"{appName} Frontend Distribution",
                 DefaultRootObject = rootObject,
                 DomainNames = new[] { subdomainName },
                 DefaultBehavior = new BehaviorOptions {
@@ -58,12 +60,12 @@ namespace Cdk
                     new ErrorResponse {
                         HttpStatus = 403,
                         ResponseHttpStatus = 200,
-                        ResponsePagePath = rootObject,
+                        ResponsePagePath = $"/{rootObject}",
                     },
                     new ErrorResponse {
                         HttpStatus = 404,
                         ResponseHttpStatus = 200,
-                        ResponsePagePath = rootObject,
+                        ResponsePagePath = $"/{rootObject}",
                     },
                 }
             });
