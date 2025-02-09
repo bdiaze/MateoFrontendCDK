@@ -35,7 +35,7 @@ namespace Cdk
                 Versioned = false,
                 RemovalPolicy = RemovalPolicy.DESTROY,
                 BlockPublicAccess = BlockPublicAccess.BLOCK_ALL,
-                BucketName = $"{appName}FrontendS3Bucket"
+                BucketName = $"{appName.ToLower()}-frontend-s3-bucket"
             });
 
             // Se despliegan piezas del frontend en el bucket...
