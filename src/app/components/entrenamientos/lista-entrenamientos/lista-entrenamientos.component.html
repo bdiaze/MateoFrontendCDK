@@ -1,0 +1,21 @@
+<div class="card m-3 border-primary">
+    <h4 class="card-header text-bg-primary">Entrenamientos</h4>
+    <div class="card-body">
+        @if (salEntrenamientos) {
+            <ul class="list-group list-group-flush">
+                @for (entrenamiento of salEntrenamientos.entrenamientos; track entrenamiento.id) {
+                    <li class="list-group-item">
+                        <app-tarjeta-entrenamiento [entrenamiento]="entrenamiento"></app-tarjeta-entrenamiento>
+                    </li>
+                } @empty {
+                    <li class="list-group-item">Sin entrenamiento</li>
+                }
+            </ul>
+        } @else {
+            <div class="d-flex justify-content-center text-primary">
+                <div class="spinner-border" role="status"></div>
+                <h4 class="mx-3 mt-1">Cargando...</h4>
+            </div>
+        }
+    </div>
+</div>

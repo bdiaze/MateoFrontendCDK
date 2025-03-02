@@ -1,0 +1,21 @@
+<div class="accordion accordion-flush">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#flush-collapse-' + entrenamiento.id" aria-expanded="false">
+                {{ entrenamiento.inicio | date : "dd MMM HH:mm" }}
+                @if (entrenamiento.serie) {
+                    - N° Serie: {{ entrenamiento.serie }}
+                }
+                @if (entrenamiento.repeticiones) {
+                    - Repetición: {{ entrenamiento.repeticiones }}
+                }
+            </button>
+        </h2>
+        <div [id]="'flush-collapse-' + entrenamiento.id" class="accordion-collapse collapse">
+            <div class="accordion-body">
+                <h6>Entrenamiento: {{ entrenamiento.segundosEntrenamiento }} segundos</h6>
+                <p class="mb-0">Descanso: {{ entrenamiento.segundosDescanso }} segundos</p>
+            </div>
+        </div>
+    </div>
+</div>
