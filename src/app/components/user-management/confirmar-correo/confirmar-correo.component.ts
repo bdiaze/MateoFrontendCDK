@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CognitoAuthenticationService } from '../../../services/cognito-authentication.service';
+import { CognitoService } from '../../../services/cognito/cognito.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthError } from 'aws-amplify/auth';
 
@@ -32,7 +32,7 @@ export class ConfirmarCorreoComponent implements OnInit {
     })
   });
 
-  constructor(private cognitoAuthenticationService: CognitoAuthenticationService, private activatedRoute: ActivatedRoute, private router: Router) {
+  constructor(private cognitoService: CognitoService, private activatedRoute: ActivatedRoute, private router: Router) {
 
   }
 
@@ -55,7 +55,7 @@ export class ConfirmarCorreoComponent implements OnInit {
     let confirmationCode:string = this.confirmarForm.controls['confirmationCode'].value;
 
     this.loading = true;
-    this.cognitoAuthenticationService.confirmarCorreo(usename, confirmationCode)
+    this.cognitoService.confirmarCorreo(usename, confirmationCode)
     .then(() => {
       this.router.navigate(['/login']);
     })
@@ -87,7 +87,7 @@ export class ConfirmarCorreoComponent implements OnInit {
     let username:string = this.confirmarForm.controls['username'].value;
 
     this.loadingReenviarCodigo = true;
-    this.cognitoAuthenticationService.solicitarNuevoCodigoConfirmacion(username)
+    this.cognitoService.solicitarNuevoCodigoConfirmacion(username)
     .then(() => {
       this.mensajeGeneral = 'Código de verificación reenviado';
     })

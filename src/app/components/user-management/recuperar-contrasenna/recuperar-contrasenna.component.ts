@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { confirmedPasswordValidator, passwordStrengthValidator } from '../../../helpers/validators/password-confirmation';
-import { CognitoAuthenticationService } from '../../../services/cognito-authentication.service';
+import { CognitoService } from '../../../services/cognito/cognito.service';
 import { Router, RouterModule } from '@angular/router';
 import { AuthError, ResetPasswordOutput } from 'aws-amplify/auth';
 
@@ -60,7 +60,7 @@ export class RecuperarContrasennaComponent {
     })
   });
 
-  constructor(private cognitoAuthenticationService: CognitoAuthenticationService, private router: Router) {
+  constructor(private cognitoService: CognitoService, private router: Router) {
 
   }
 
@@ -83,7 +83,7 @@ export class RecuperarContrasennaComponent {
     let username:string = this.enviarCodigoForm.controls['username'].value;
 
     this.loadingEnvioCodigo = true;
-    this.cognitoAuthenticationService.solicitarCodigoRecuperacionContrasenna(username)
+    this.cognitoService.solicitarCodigoRecuperacionContrasenna(username)
     .then((content:ResetPasswordOutput) => {
       let nextStep:string = content.nextStep.resetPasswordStep;
       if (nextStep == 'CONFIRM_RESET_PASSWORD_WITH_CODE') {
@@ -148,7 +148,7 @@ export class RecuperarContrasennaComponent {
     let contrasenna:string = this.recuperacionForm.controls['contrasenna'].value;
 
     this.loading = true;
-    this.cognitoAuthenticationService.recuperarContrasenna(username, confirmationCode, contrasenna)
+    this.cognitoService.recuperarContrasenna(username, confirmationCode, contrasenna)
     .then(() => {
       this.router.navigate(['/login']);
     })

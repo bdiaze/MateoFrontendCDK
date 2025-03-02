@@ -20,7 +20,7 @@
         }
       }
       <div class="d-grid gap-2">
-        <button class="btn btn-success btn-sm mt-3" type="submit" [disabled]="loading">
+        <button class="btn btn-success btn-sm mt-3" type="submit" [disabled]="loading || sesionIniciada">
           @if (loading) {
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           }

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CognitoAuthenticationService } from '../../../services/cognito-authentication.service';
+import { CognitoService } from '../../../services/cognito/cognito.service';
 import { Router, RouterModule } from '@angular/router';
 import { AuthError, SignUpOutput } from 'aws-amplify/auth';
 import { confirmedPasswordValidator, passwordStrengthValidator } from '../../../helpers/validators/password-confirmation';
@@ -50,7 +50,7 @@ export class CreacionUsuarioComponent {
     }
   );
 
-  constructor(private cognitoAuthenticationService: CognitoAuthenticationService, private router: Router) {
+  constructor(private cognitoService: CognitoService, private router: Router) {
 
   }
 
@@ -76,7 +76,7 @@ export class CreacionUsuarioComponent {
     let contrasenna:string = this.creacionForm.controls['contrasenna'].value;
 
     this.loading = true;
-    this.cognitoAuthenticationService.crearCuenta(username, email, contrasenna)
+    this.cognitoService.crearCuenta(username, email, contrasenna)
     .then((content:SignUpOutput) => {
       let nextStep:string = content.nextStep.signUpStep;
       if (nextStep == 'CONFIRM_SIGN_UP') {

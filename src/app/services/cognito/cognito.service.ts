@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Amplify } from 'aws-amplify';
 import { confirmSignUp, fetchAuthSession, getCurrentUser, resendSignUpCode, signIn, signOut, signUp, resetPassword, confirmResetPassword } from 'aws-amplify/auth';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CognitoAuthenticationService {
+export class CognitoService {
 
   constructor() {
     Amplify.configure({
       Auth: {
         Cognito: {
-          userPoolId: environment.userPoolId,
-          userPoolClientId: environment.clientId
+          userPoolId: environment.cognitoService.userPoolId,
+          userPoolClientId: environment.cognitoService.clientId
         }
       }
     });

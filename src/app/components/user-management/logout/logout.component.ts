@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthError } from 'aws-amplify/auth';
-import { CognitoAuthenticationService } from '../../../services/cognito-authentication.service';
+import { CognitoService } from '../../../services/cognito/cognito.service';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -16,7 +16,7 @@ export class LogoutComponent {
   sesionIniciada: boolean = false;
   sesionIniciadaPrincipio: boolean = false;
 
-  constructor(private cognitoAuthenticationService: CognitoAuthenticationService, private router: Router) {
+  constructor(private cognitoService: CognitoService, private router: Router) {
     this.validarSiSesionIniciada(true);
   }
 
@@ -25,7 +25,7 @@ export class LogoutComponent {
     this.sesionIniciada = false;
 
     // Se valida si la sesión está inicializada...
-    this.cognitoAuthenticationService.obtenerUsuarioActual()
+    this.cognitoService.obtenerUsuarioActual()
     .then((session) => {
       this.sesionIniciada = true;
     })
@@ -33,6 +33,7 @@ export class LogoutComponent {
       if (error instanceof AuthError) {
         if (error.name === 'UserUnAuthenticatedException') {
           this.sesionIniciada = false;
+          this.router.navigate(['/login']);
           return;
         }
       }
@@ -53,7 +54,7 @@ export class LogoutComponent {
     let segundosEspera = 5;
 
     this.loading = true;
-    this.cognitoAuthenticationService.cerrarSesion()
+    this.cognitoService.cerrarSesion()
     .then(() => {
       this.mensajeCierreSesion = `Sesión finalizada. Será redireccionado en ${segundosEspera} segundos...`;
       let interval = setInterval(() => {
@@ -71,8 +72,6 @@ export class LogoutComponent {
     })
     .finally(() => {
       this.loading = false;
-      // Una vez se termina de llamar al método para cerrar sesión, se vuelve a validar estado de la sesión...
-      this.validarSiSesionIniciada();
     });
   }
 }

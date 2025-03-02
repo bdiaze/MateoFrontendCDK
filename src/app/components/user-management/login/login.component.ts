@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthError, SignInOutput } from 'aws-amplify/auth';
-import { CognitoAuthenticationService } from '../../../services/cognito-authentication.service';
+import { CognitoService } from '../../../services/cognito/cognito.service';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -16,6 +16,7 @@ export class LoginComponent {
   mostrandoContrasenna: boolean = false;
   loading: boolean = false;
   mensajeErrorGeneral: string = '';
+  sesionIniciada: boolean = true;
 
   formBuilder = inject(NonNullableFormBuilder);
   loginForm: FormGroup = this.formBuilder.group({
@@ -27,8 +28,8 @@ export class LoginComponent {
     })
   });
 
-  constructor(private cognitoAuthenticationService: CognitoAuthenticationService, private router: Router) {
-
+  constructor(private cognitoService: CognitoService, private router: Router) {
+    this.validarSiSesionIniciada();
   }
 
   mostrarContrasenna() {
@@ -52,11 +53,11 @@ export class LoginComponent {
     let contrasenna:string = this.loginForm.controls['contrasenna'].value;
 
     this.loading = true;
-    this.cognitoAuthenticationService.iniciarSesion(username, contrasenna)
+    this.cognitoService.iniciarSesion(username, contrasenna)
     .then((content: SignInOutput) => {
       let nextStep:string = content.nextStep.signInStep;
       if (nextStep == 'DONE') {
-        this.router.navigate(['/logout']);
+        this.router.navigate(['/listaentrenamientos']);
       } else if (nextStep == 'CONFIRM_SIGN_UP') {
         this.router.navigate(['/accountverification', username]);
       }
@@ -76,6 +77,29 @@ export class LoginComponent {
     })
     .finally(() => {
       this.loading = false;
+    });
+  }
+
+  validarSiSesionIniciada() {
+    // Se asume que la sesión está inicializada...
+    this.sesionIniciada = true;
+
+    // Se valida si la sesión está inicializada...
+    this.cognitoService.obtenerUsuarioActual()
+    .then((session) => {
+      this.sesionIniciada = true;
+      this.router.navigate(['/listaentrenamientos']);
+    })
+    .catch((error) => {
+      if (error instanceof AuthError) {
+        if (error.name === 'UserUnAuthenticatedException') {
+          this.sesionIniciada = false;
+          return;
+        }
+      }
+
+      console.log('Ocurrió un error al validar si usuario tenía su sesión iniciada: ' + error);
+      this.mensajeErrorGeneral = 'Ocurrió un error inesperado, intente nuevamente...';
     });
   }
 }

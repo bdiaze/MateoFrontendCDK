@@ -1,4 +1,9 @@
 export const environment = {
-  userPoolId: '',
-  clientId: ''
+    cognitoService: {
+        userPoolId: '',
+        clientId: '',
+    },
+    mateoService: {
+        apiUrl: ''
+    }
 };
