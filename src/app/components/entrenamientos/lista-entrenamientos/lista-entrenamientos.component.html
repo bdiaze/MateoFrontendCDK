@@ -1,6 +1,15 @@
 <div class="card m-3 border-primary">
     <h4 class="card-header text-bg-primary">Entrenamientos</h4>
     <div class="card-body">
+        <form [formGroup]="desdeHastaForm">
+            <div class="input-group input-group-sm">
+                <!--<span class="input-group-text">Desde</span>-->
+                <input type="date" class="form-control" (input)="obtenerEntrenamientos()" [ngClass]="{'is-invalid': desdeHastaForm.controls['desde'].invalid}" placeholder="dd/mm/aaaa" formControlName="desde"/>
+                <input type="date" class="form-control" (input)="obtenerEntrenamientos()" [ngClass]="{'is-invalid': desdeHastaForm.controls['hasta'].invalid}" placeholder="dd/mm/aaaa" formControlName="hasta"/>
+                <!--<span class="input-group-text">Hasta</span>-->
+            </div>
+        </form>
+
         @if (salEntrenamientos) {
             <ul class="list-group list-group-flush">
                 @for (entrenamiento of salEntrenamientos.entrenamientos; track entrenamiento.id) {
@@ -12,7 +21,7 @@
                 }
             </ul>
         } @else {
-            <div class="d-flex justify-content-center text-primary">
+            <div class="d-flex justify-content-center text-primary mt-3">
                 <div class="spinner-border" role="status"></div>
                 <h4 class="mx-3 mt-1">Cargando...</h4>
             </div>
