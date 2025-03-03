@@ -2,7 +2,7 @@
     <h4 class="card-header text-bg-primary">Entrenamientos</h4>
     <div class="card-body">
         <form [formGroup]="desdeHastaForm">
-            <div class="input-group input-group-sm">
+            <div class="input-group">
                 <!--<span class="input-group-text">Desde</span>-->
                 <input type="date" class="form-control" (input)="obtenerEntrenamientos()" [ngClass]="{'is-invalid': desdeHastaForm.controls['desde'].invalid}" placeholder="dd/mm/aaaa" formControlName="desde"/>
                 <input type="date" class="form-control" (input)="obtenerEntrenamientos()" [ngClass]="{'is-invalid': desdeHastaForm.controls['hasta'].invalid}" placeholder="dd/mm/aaaa" formControlName="hasta"/>
@@ -10,9 +10,9 @@
             </div>
         </form>
 
-        @if (salEntrenamientos) {
-            <ul class="list-group list-group-flush">
-                @for (entrenamiento of salEntrenamientos.entrenamientos; track entrenamiento.id) {
+        @if (!cargando) {
+            <ul class="list-group list-group-flush my-2">
+                @for (entrenamiento of salEntrenamientos?.entrenamientos; track entrenamiento.id) {
                     <li class="list-group-item">
                         <app-tarjeta-entrenamiento [entrenamiento]="entrenamiento"></app-tarjeta-entrenamiento>
                     </li>
@@ -21,10 +21,32 @@
                 }
             </ul>
         } @else {
-            <div class="d-flex justify-content-center text-primary mt-3">
+            <div class="d-flex justify-content-center text-primary my-4">
                 <div class="spinner-border" role="status"></div>
                 <h4 class="mx-3 mt-1">Cargando...</h4>
             </div>
+        }
+
+        @if (salEntrenamientos?.totalPaginas! > 1) {
+            <nav aria-label="Páginas listado de entrenamientos">
+                <ul class="pagination justify-content-center mb-0">
+                    <li class="page-item">
+                        <span class="page-link" aria-label="Anterior" (click)="cambiarPagina(numPagina - 1)">
+                            <span aria-hidden="true"><</span>
+                        </span>
+                    </li>
+                    @for (pagina of paginas; track pagina) {
+                        <li class="page-item" [ngClass]="{'active': pagina == numPagina}">
+                            <span class="page-link" (click)="cambiarPagina(pagina)">{{ pagina }}</span>
+                        </li>
+                    }
+                    <li class="page-item">
+                        <span class="page-link" aria-label="Siguiente" (click)="cambiarPagina(numPagina + 1)">
+                            <span aria-hidden="true">></span>
+                        </span>
+                    </li>
+                </ul>
+            </nav>
         }
     </div>
 </div>

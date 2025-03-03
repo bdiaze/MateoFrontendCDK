@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 export class ListaEntrenamientosComponent {
     numPagina: number;
     cantElemPagina: number;
+    cargando: boolean = true;
 
     formBuilder = inject(NonNullableFormBuilder);
 
@@ -33,6 +34,7 @@ export class ListaEntrenamientosComponent {
     });
 
     salEntrenamientos:SalEntrenamiento | undefined;
+    paginas: number[] | undefined;
 
     constructor(private entrenamientoService:EntrenamientoService) {
         // "Hasta": Fecha actual y "Desde": Día anterior...
@@ -43,7 +45,7 @@ export class ListaEntrenamientosComponent {
         this.desdeHastaForm.controls['desde'].setValue(`${desdeDate.getFullYear().toString().padStart(4, "0")}-${(desdeDate.getMonth() + 1).toString().padStart(2, "0")}-${desdeDate.getDate().toString().padStart(2, "0")}`);
 
         this.numPagina = 1;
-        this.cantElemPagina = 25;
+        this.cantElemPagina = 10;
 
         this.obtenerEntrenamientos();
     }
@@ -58,11 +60,20 @@ export class ListaEntrenamientosComponent {
 
         let desdeDate: Date = new Date(Date.UTC(parseInt(desdeArray[0]), parseInt(desdeArray[1]) - 1, parseInt(desdeArray[2])));
         let hastaDate: Date = new Date((new Date(Date.UTC(parseInt(hastaArray[0]), parseInt(hastaArray[1]) - 1, parseInt(hastaArray[2])))).getTime() + (1 * 24 * 60 * 60 * 1000));
-
-        this.salEntrenamientos = undefined;
+        this.cargando = true;
         this.entrenamientoService.listar(desdeDate, hastaDate, this.numPagina, this.cantElemPagina)
         .subscribe((response:SalEntrenamiento) => {
             this.salEntrenamientos = response
+            this.paginas = new Array(this.salEntrenamientos.totalPaginas).fill(0).map((n, index) => index + 1);
+            this.cargando = false;
         });
+    }
+
+    cambiarPagina(nuevaPagina: number) {
+        if (nuevaPagina < 1 || nuevaPagina > this.salEntrenamientos?.totalPaginas!) {
+            return;
+        }
+        this.numPagina = nuevaPagina;
+        this.obtenerEntrenamientos();
     }
 }
