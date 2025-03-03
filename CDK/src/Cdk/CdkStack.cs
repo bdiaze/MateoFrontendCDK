@@ -31,24 +31,18 @@ namespace Cdk
             });
 
             // Se crea bucket donde se almacenará aplicación frontend...  
-            Bucket bucket = new Bucket(this, $"{appName}FrontendS3Bucket", new BucketProps {
+            Bucket bucket = new(this, $"{appName}FrontendS3Bucket", new BucketProps {
                 Versioned = false,
                 RemovalPolicy = RemovalPolicy.DESTROY,
                 BlockPublicAccess = BlockPublicAccess.BLOCK_ALL,
                 BucketName = $"{appName.ToLower()}-frontend-s3-bucket"
             });
-
-            // Se despliegan piezas del frontend en el bucket...
-            BucketDeployment deployment = new BucketDeployment(this, $"{appName}FrontendDeployment", new BucketDeploymentProps {
-                Sources = new[] { Source.Asset(buildDirectory) },
-                DestinationBucket = bucket,
-            });
-
+                        
             // Se crea distribución de cloudfront...
-            Distribution distribution = new Distribution(this, $"{appName}FrontendDistribution", new DistributionProps {
+            Distribution distribution = new(this, $"{appName}FrontendDistribution", new DistributionProps {
                 Comment = $"{appName} Frontend Distribution",
                 DefaultRootObject = rootObject,
-                DomainNames = new[] { subdomainName },
+                DomainNames = [subdomainName],
                 DefaultBehavior = new BehaviorOptions {
                     Origin = S3BucketOrigin.WithOriginAccessControl(bucket),
                     Compress = true,
@@ -56,7 +50,7 @@ namespace Cdk
                     ViewerProtocolPolicy = ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 },
                 Certificate = certificate,
-                ErrorResponses = new[] {
+                ErrorResponses = [
                     new ErrorResponse {
                         HttpStatus = 403,
                         ResponseHttpStatus = 200,
@@ -67,11 +61,18 @@ namespace Cdk
                         ResponseHttpStatus = 200,
                         ResponsePagePath = $"/{rootObject}",
                     },
-                }
+                ]
+            });
+
+            // Se despliegan piezas del frontend en el bucket...
+            _ = new BucketDeployment(this, $"{appName}FrontendDeployment", new BucketDeploymentProps {
+                Sources = [Source.Asset(buildDirectory)],
+                DestinationBucket = bucket,
+                Distribution = distribution,
             });
 
             // Se crea record en hosted zone...
-            ARecord record = new ARecord(this, $"{appName}FrontendARecord", new ARecordProps {
+            _ = new ARecord(this, $"{appName}FrontendARecord", new ARecordProps {
                 Zone = hostedZone,
                 RecordName = subdomainName,
                 Target = RecordTarget.FromAlias(new CloudFrontTarget(distribution)),
