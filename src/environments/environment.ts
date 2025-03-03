@@ -5,5 +5,8 @@ export const environment = {
     },
     mateoService: {
         apiUrl: ''
+    },
+    listados: {
+        cantElementos: 0,
     }
 };

@@ -4,6 +4,7 @@ import { SalEntrenamiento } from '../../../models/sal-entrenamiento';
 import { TarjetaEntrenamientoComponent } from '../tarjeta-entrenamiento/tarjeta-entrenamiento.component';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-lista-entrenamientos',
@@ -45,7 +46,7 @@ export class ListaEntrenamientosComponent {
         this.desdeHastaForm.controls['desde'].setValue(`${desdeDate.getFullYear().toString().padStart(4, "0")}-${(desdeDate.getMonth() + 1).toString().padStart(2, "0")}-${desdeDate.getDate().toString().padStart(2, "0")}`);
 
         this.numPagina = 1;
-        this.cantElemPagina = 10;
+        this.cantElemPagina = environment.listados.cantElementos;
 
         this.obtenerEntrenamientos();
     }
