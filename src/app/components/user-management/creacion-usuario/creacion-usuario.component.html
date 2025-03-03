@@ -3,7 +3,11 @@
     <h4 class="card-header text-bg-primary">Creación de Cuenta</h4>
     <div class="card-body">
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control" aria-describedby="usernameHelpBlock" placeholder="Nombre de Usuario" formControlName="username"/>
+        <input type="text" class="form-control" aria-describedby="usernameHelpBlock" placeholder="Nombre de Usuario" formControlName="username"
+            [ngClass]="{
+                'is-invalid': creacionForm.controls['username'].invalid && (creacionForm.controls['username'].touched || creacionForm.controls['username'].dirty),
+                'is-valid': creacionForm.controls['username'].valid && (creacionForm.controls['username'].touched || creacionForm.controls['username'].dirty)
+            }"/>
       </div>
       @if (creacionForm.controls['username'].invalid && (creacionForm.controls['username'].touched || creacionForm.controls['username'].dirty)) {
         @if (creacionForm.controls['username'].errors?.["required"]) {
@@ -12,7 +16,11 @@
       }
 
       <div class="input-group input-group-sm mt-2">
-        <input type="text" class="form-control" aria-describedby="emailHelpBlock" placeholder="Correo" formControlName="email"/>
+        <input type="text" class="form-control" aria-describedby="emailHelpBlock" placeholder="Correo" formControlName="email"
+            [ngClass]="{
+                'is-invalid': creacionForm.controls['email'].invalid && (creacionForm.controls['email'].touched || creacionForm.controls['email'].dirty),
+                'is-valid': creacionForm.controls['email'].valid && (creacionForm.controls['email'].touched || creacionForm.controls['email'].dirty)
+            }"/>
       </div>
       @if (creacionForm.controls['email'].invalid && (creacionForm.controls['email'].touched || creacionForm.controls['email'].dirty)) {
         @if (creacionForm.controls['email'].errors?.["required"]) {
@@ -24,7 +32,11 @@
       }
 
       <div class="input-group input-group-sm mt-2">
-        <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Contraseña" formControlName="contrasenna"/>
+        <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Contraseña" formControlName="contrasenna"
+            [ngClass]="{
+                'is-invalid': creacionForm.controls['contrasenna'].invalid && (creacionForm.controls['contrasenna'].touched || creacionForm.controls['contrasenna'].dirty),
+                'is-valid': creacionForm.controls['contrasenna'].valid && (creacionForm.controls['contrasenna'].touched || creacionForm.controls['contrasenna'].dirty)
+            }"/>
         <button class="btn btn-primary" type="button" tabindex="-1"
             (mousedown)="mostrarContrasenna()"
             (touchstart)="mostrarContrasenna()"
@@ -56,7 +68,11 @@
       }
 
       <div class="input-group input-group-sm mt-2">
-        <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="confContrasennaHelpBlock" placeholder="Confirmar Contraseña" formControlName="confContrasenna"/>
+        <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="confContrasennaHelpBlock" placeholder="Confirmar Contraseña" formControlName="confContrasenna"
+            [ngClass]="{
+                'is-invalid': creacionForm.controls['confContrasenna'].invalid && (creacionForm.controls['confContrasenna'].touched || creacionForm.controls['confContrasenna'].dirty),
+                'is-valid': creacionForm.controls['confContrasenna'].valid && (creacionForm.controls['confContrasenna'].touched || creacionForm.controls['confContrasenna'].dirty)
+            }"/>
       </div>
       @if (creacionForm.controls['confContrasenna'].invalid && (creacionForm.controls['confContrasenna'].touched || creacionForm.controls['confContrasenna'].dirty)) {
         @if (creacionForm.controls['confContrasenna'].errors?.["required"]) {

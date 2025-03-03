@@ -5,14 +5,12 @@
         <div class="input-group input-group-sm">
           <input type="hidden" readonly class="form-control" aria-describedby="usernameHelpBlock" placeholder="Nombre de Usuario" formControlName="username"/>
         </div>
-        @if (confirmarForm.controls['username'].invalid && (confirmarForm.controls['username'].touched || confirmarForm.controls['username'].dirty)) {
-          @if (confirmarForm.controls['username'].errors?.["required"]) {
-            <div class="form-text text-danger px-2">Debe ingresar su nombre de usuario</div>
-          }
-        }
-
         <div class="input-group input-group-sm mt">
-          <input type="text" class="form-control" aria-describedby="confirmationCodeHelpBlock" placeholder="Código de Verificación" formControlName="confirmationCode"/>
+          <input type="text" class="form-control" aria-describedby="confirmationCodeHelpBlock" placeholder="Código de Verificación" formControlName="confirmationCode"
+            [ngClass]="{
+                'is-invalid': confirmarForm.controls['confirmationCode'].invalid && (confirmarForm.controls['confirmationCode'].touched || confirmarForm.controls['confirmationCode'].dirty),
+                'is-valid': confirmarForm.controls['confirmationCode'].valid && (confirmarForm.controls['confirmationCode'].touched || confirmarForm.controls['confirmationCode'].dirty)
+            }"/>
         </div>
         @if (confirmarForm.controls['confirmationCode'].invalid && (confirmarForm.controls['confirmationCode'].touched || confirmarForm.controls['confirmationCode'].dirty)) {
           @if (confirmarForm.controls['confirmationCode'].errors?.["required"]) {

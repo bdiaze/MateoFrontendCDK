@@ -3,7 +3,11 @@
     <div class="card-body">
         <form [formGroup]="enviarCodigoForm" (ngSubmit)="onSubmitEnviarCodigo()">
             <div class="input-group input-group-sm">
-                <input type="text" class="form-control" aria-describedby="usernameHelpBlock" placeholder="Nombre de Usuario o Correo" formControlName="username"/>
+                <input type="text" class="form-control" aria-describedby="usernameHelpBlock" placeholder="Nombre de Usuario o Correo" formControlName="username"
+                    [ngClass]="{
+                        'is-invalid': enviarCodigoForm.controls['username'].invalid && (enviarCodigoForm.controls['username'].touched || enviarCodigoForm.controls['username'].dirty),
+                        'is-valid': enviarCodigoForm.controls['username'].valid && (enviarCodigoForm.controls['username'].touched || enviarCodigoForm.controls['username'].dirty)
+                    }"/>
                 <button class="btn btn-primary" type="button" tabindex="-1" type="submit" [disabled]="loadingEnvioCodigo || deshabilitarEnvioCodigo">
                     @if (loadingEnvioCodigo) {
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -27,7 +31,11 @@
             </div>
 
             <div class="input-group input-group-sm mt-2">
-                <input type="text" class="form-control" aria-describedby="confirmationCodeHelpBlock" placeholder="Código de Recuperación" formControlName="confirmationCode"/>
+                <input type="text" class="form-control" aria-describedby="confirmationCodeHelpBlock" placeholder="Código de Recuperación" formControlName="confirmationCode"
+                    [ngClass]="{
+                        'is-invalid': recuperacionForm.controls['confirmationCode'].invalid && (recuperacionForm.controls['confirmationCode'].touched || recuperacionForm.controls['confirmationCode'].dirty),
+                        'is-valid': recuperacionForm.controls['confirmationCode'].valid && (recuperacionForm.controls['confirmationCode'].touched || recuperacionForm.controls['confirmationCode'].dirty)
+                    }"/>
             </div>
             @if (recuperacionForm.controls['confirmationCode'].invalid && (recuperacionForm.controls['confirmationCode'].touched || recuperacionForm.controls['confirmationCode'].dirty)) {
                 @if (recuperacionForm.controls['confirmationCode'].errors?.["required"]) {
@@ -36,7 +44,11 @@
             }
 
             <div class="input-group input-group-sm mt-2">
-                <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Nueva Contraseña" formControlName="contrasenna"/>
+                <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Nueva Contraseña" formControlName="contrasenna"
+                    [ngClass]="{
+                        'is-invalid': recuperacionForm.controls['contrasenna'].invalid && (recuperacionForm.controls['contrasenna'].touched || recuperacionForm.controls['contrasenna'].dirty),
+                        'is-valid': recuperacionForm.controls['contrasenna'].valid && (recuperacionForm.controls['contrasenna'].touched || recuperacionForm.controls['contrasenna'].dirty)
+                    }"/>
                 <button class="btn btn-primary" type="button" tabindex="-1"
                     (mousedown)="mostrarContrasenna()"
                     (touchstart)="mostrarContrasenna()"
@@ -68,7 +80,11 @@
             }
 
             <div class="input-group input-group-sm mt-2">
-                <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="confContrasennaHelpBlock" placeholder="Confirmar Contraseña" formControlName="confContrasenna"/>
+                <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="confContrasennaHelpBlock" placeholder="Confirmar Contraseña" formControlName="confContrasenna"
+                    [ngClass]="{
+                        'is-invalid': recuperacionForm.controls['confContrasenna'].invalid && (recuperacionForm.controls['confContrasenna'].touched || recuperacionForm.controls['confContrasenna'].dirty),
+                        'is-valid': recuperacionForm.controls['confContrasenna'].valid && (recuperacionForm.controls['confContrasenna'].touched || recuperacionForm.controls['confContrasenna'].dirty)
+                    }"/>
             </div>
             @if (recuperacionForm.controls['confContrasenna'].invalid && (recuperacionForm.controls['confContrasenna'].touched || recuperacionForm.controls['confContrasenna'].dirty)) {
                 @if (recuperacionForm.controls['confContrasenna'].errors?.["required"]) {

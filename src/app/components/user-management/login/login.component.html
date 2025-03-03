@@ -3,7 +3,8 @@
     <h4 class="card-header text-bg-primary">Inicio de Sesión</h4>
     <div class="card-body">
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control" aria-describedby="usernameHelpBlock" placeholder="Usuario o Correo" formControlName="username"/>
+        <input type="text" class="form-control" aria-describedby="usernameHelpBlock" placeholder="Usuario o Correo" formControlName="username"
+            [ngClass]="{'is-invalid': loginForm.controls['username'].invalid && (loginForm.controls['username'].touched || loginForm.controls['username'].dirty)}"/>
       </div>
       @if (loginForm.controls['username'].invalid && (loginForm.controls['username'].touched || loginForm.controls['username'].dirty)) {
         @if (loginForm.controls['username'].errors?.["required"]) {
@@ -11,7 +12,8 @@
         }
       }
       <div class="input-group input-group-sm mt-3">
-        <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Contraseña" formControlName="contrasenna"/>
+        <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Contraseña" formControlName="contrasenna"
+            [ngClass]="{'is-invalid': loginForm.controls['contrasenna'].invalid && (loginForm.controls['contrasenna'].touched || loginForm.controls['contrasenna'].dirty)}"/>
         <button class="btn btn-primary" type="button" tabindex="-1"
             (mousedown)="mostrarContrasenna()"
             (touchstart)="mostrarContrasenna()"
