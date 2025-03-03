@@ -4,8 +4,8 @@
         <form [formGroup]="desdeHastaForm">
             <div class="input-group">
                 <!--<span class="input-group-text">Desde</span>-->
-                <input type="date" class="form-control" (input)="obtenerEntrenamientos()" [ngClass]="{'is-invalid': desdeHastaForm.controls['desde'].invalid}" placeholder="dd/mm/aaaa" formControlName="desde"/>
-                <input type="date" class="form-control" (input)="obtenerEntrenamientos()" [ngClass]="{'is-invalid': desdeHastaForm.controls['hasta'].invalid}" placeholder="dd/mm/aaaa" formControlName="hasta"/>
+                <input type="date" class="form-control text-center" (input)="obtenerEntrenamientos()" [ngClass]="{'is-invalid': desdeHastaForm.controls['desde'].invalid}" placeholder="dd/mm/aaaa" formControlName="desde"/>
+                <input type="date" class="form-control text-center" (input)="obtenerEntrenamientos()" [ngClass]="{'is-invalid': desdeHastaForm.controls['hasta'].invalid}" placeholder="dd/mm/aaaa" formControlName="hasta"/>
                 <!--<span class="input-group-text">Hasta</span>-->
             </div>
         </form>
@@ -17,7 +17,7 @@
                         <app-tarjeta-entrenamiento [entrenamiento]="entrenamiento"></app-tarjeta-entrenamiento>
                     </li>
                 } @empty {
-                    <li class="list-group-item">Sin entrenamiento</li>
+                    <li class="list-group-item text-center">Nada que mostrar...</li>
                 }
             </ul>
         } @else {
