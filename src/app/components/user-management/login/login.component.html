@@ -12,7 +12,14 @@
       }
       <div class="input-group input-group-sm mt-3">
         <input [type]="mostrandoContrasenna ? 'text': 'password'" class="form-control" aria-describedby="contrasennaHelpBlock" placeholder="Contraseña" formControlName="contrasenna"/>
-        <button class="btn btn-primary" type="button" (mousedown)="mostrarContrasenna()" (mouseup)="ocultarContrasenna()" (mouseleave)="ocultarContrasenna()" tabindex="-1">Mostrar</button>
+        <button class="btn btn-primary" type="button" tabindex="-1"
+            (mousedown)="mostrarContrasenna()"
+            (touchstart)="mostrarContrasenna()"
+            (mouseup)="ocultarContrasenna()"
+            (mouseleave)="ocultarContrasenna()"
+            (touchend)="ocultarContrasenna()">
+            Mostrar
+        </button>
       </div>
       @if (loginForm.controls['contrasenna'].invalid && (loginForm.controls['contrasenna'].touched || loginForm.controls['contrasenna'].dirty)) {
         @if (loginForm.controls['contrasenna'].errors?.["required"]) {
