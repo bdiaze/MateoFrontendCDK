@@ -1,7 +1,7 @@
 export class EntEntrenamiento {
     idRequest!: string;
     inicio!: Date;
-    termino!: Date;
+    termino: Date | undefined;
     idTipoEjercicio: number | undefined;
     serie: number = 1;
     repeticiones: number | undefined;

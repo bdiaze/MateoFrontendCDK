@@ -19,71 +19,66 @@ export class CronometroComponent {
     readonly IMAGE_PATH_ENTRENANDO: string = 'musculo.png';
 
     readonly TIEMPO_ADICIONAL: number = 15;
+    readonly TIEMPO_DANGER: number = 10;
 
     // Variables del estado del cronómetro
     actividad: string = this.PREENTRENO;
     timer: number | undefined;
-    deltaTimer: number | undefined;
     interval: ReturnType<typeof setInterval> | undefined;
-    imagePath: string | undefined;
+    entEntrenamiento: EntEntrenamiento | undefined;
+    ultimoTiempoDescansoInicial: number | undefined;
 
-    // Variables de la serie...
-    serie: number | undefined;
-    guid: string | undefined;
-    inicio: Date | undefined;
-    termino: Date | undefined;
-
-    ultimoTiempoEntrenamiento: number | undefined;
-    ultimoTiempoDescanso: number | undefined;
+    // Animación Botón de Descanso a Entrenar...
+    danger: boolean = false;
 
     constructor(private entrenamientoService:EntrenamientoService) {
         this.actividad = this.PREENTRENO;
         this.timer = undefined;
-        this.deltaTimer = undefined;
-        this.imagePath = this.IMAGE_PATH_ENTRENANDO;
     }
 
     aumentarTiempo(segundos: number) {
+        this.ultimoTiempoDescansoInicial && (this.ultimoTiempoDescansoInicial += segundos);
         this.timer && (this.timer += segundos);
 
-        // Se vuelve a setear interval para que cambios en timer no sean tan abruptos visualmente...
+        // Se vuelve a activar cronometro...
+        if (this.actividad != this.PREENTRENO) {
+            this.activarCronometro(this.timer!, -1);
+        }
+    }
+
+    activarCronometro(tiempoInicial: number, deltaTimer: number) {
         if (this.interval != undefined) {
             clearInterval(this.interval);
             this.interval = undefined;
         }
 
-        if (this.actividad != this.PREENTRENO) {
-            this.interval = setInterval(() => {
-                this.timer! += this.deltaTimer!;
+        this.timer = tiempoInicial;
+        this.interval = setInterval(() => {
+            this.timer! += deltaTimer;
 
-                if (this.timer! <= 0) {
-                    this.cronometroClick();
-                }
-            }, 1000);
-        }
+            if (this.timer! <= 0) {
+                this.cronometroClick();
+            } else if (this.timer! < this.TIEMPO_DANGER && deltaTimer < 0 &&  !this.danger) {
+                this.danger = true;
+            }
+        }, 1000);
     }
 
     cronometroClick() {
+        this.danger = false;
+
         // Se cambia al nuevo estado del cronometro...
         if (this.actividad == this.ENTRENANDO) {
+            this.entEntrenamiento!.segundosEntrenamiento = this.timer;
+
+            // Se cambia al estado de descanso...
             this.actividad = this.DESCANSANDO;
-            this.ultimoTiempoEntrenamiento = this.timer;
         } else if (this.actividad == this.DESCANSANDO) {
             // Ya que estamos saliendo del descanso, se ejecutan tareas para grabar serie...
-            this.ultimoTiempoDescanso = this.TIMER_DEFAULT_DESCANSANDO - this.timer!;
-            this.termino = new Date();
+            this.entEntrenamiento!.segundosDescanso = this.ultimoTiempoDescansoInicial! - this.timer!;
+            this.entEntrenamiento!.termino = new Date();
 
-            let entEntrenamiento:EntEntrenamiento = {
-                idRequest: this.guid!,
-                inicio: this.inicio!,
-                termino: this.termino!,
-                idTipoEjercicio: undefined,
-                serie: this.serie!,
-                repeticiones: undefined,
-                segundosEntrenamiento: this.ultimoTiempoEntrenamiento,
-                segundosDescanso: this.ultimoTiempoDescanso
-            };
-            this.entrenamientoService.crear(entEntrenamiento)
+            this.entrenamientoService.crear(this.entEntrenamiento!)
             .subscribe({
                 next: () => {},
                 error: (err) => {
@@ -91,46 +86,40 @@ export class CronometroComponent {
                 }
             });
 
-            // Se cambia el estado de entrenando...
+            // Se cambia al estado de entrenando...
             this.actividad = this.ENTRENANDO
-            this.serie!++;
         } else if (this.actividad == this.PREENTRENO) {
+            this.entEntrenamiento = undefined;
+
+            // Se cambia al estado de entrenando...
             this.actividad = this.ENTRENANDO;
-            this.serie = 1;
         }
 
-        // Se modifica el timer e imagen según la actividad que se está iniciando...
+        // Según los nuevos estados, se setean variables y se activan los parámetros...
         if (this.actividad == this.ENTRENANDO) {
-            this.timer = this.TIMER_DEFAULT_ENTRENANDO;
-            this.deltaTimer = 1;
-            this.imagePath = this.IMAGE_PATH_ENTRENANDO;
-            this.guid = crypto.randomUUID();
-            this.inicio = new Date();
+            this.entEntrenamiento = {
+                idRequest: crypto.randomUUID(),
+                inicio: new Date(),
+                termino: undefined,
+                idTipoEjercicio: undefined,
+                serie: (this.entEntrenamiento) ? this.entEntrenamiento.serie + 1: 1,
+                repeticiones: undefined,
+                segundosEntrenamiento: undefined,
+                segundosDescanso: undefined
+            };
+
+            this.activarCronometro(this.TIMER_DEFAULT_ENTRENANDO, 1);
         } else if (this.actividad == this.DESCANSANDO) {
-            this.timer = this.TIMER_DEFAULT_DESCANSANDO;
-            this.deltaTimer = -1;
-            this.imagePath = this.IMAGE_PATH_DESCANSANDO;
-        } else if (this.actividad == this.PREENTRENO) {
+            this.ultimoTiempoDescansoInicial = this.TIMER_DEFAULT_DESCANSANDO
+
+            this.activarCronometro(this.TIMER_DEFAULT_DESCANSANDO, -1);
+        } else {
             this.timer = undefined;
-            this.deltaTimer = undefined;
-            this.imagePath = this.IMAGE_PATH_ENTRENANDO;
-            this.guid = undefined;
-        }
 
-        // Se setea interval según actividad...
-        if (this.interval != undefined) {
-            clearInterval(this.interval);
-            this.interval = undefined;
-        }
-
-        if (this.actividad != this.PREENTRENO) {
-            this.interval = setInterval(() => {
-                this.timer! += this.deltaTimer!;
-
-                if (this.timer! <= 0) {
-                    this.cronometroClick();
-                }
-            }, 1000);
+            if (this.interval != undefined) {
+                clearInterval(this.interval);
+                this.interval = undefined;
+            }
         }
     }
 

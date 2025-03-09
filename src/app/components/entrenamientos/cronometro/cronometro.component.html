@@ -1,13 +1,20 @@
-<div class="card m-3" [class]="actividad == DESCANSANDO ? 'border-primary': 'border-primary'">
-    <h4 class="card-header" [class]="actividad == DESCANSANDO ? 'text-bg-primary': 'text-bg-primary'">Cronómetro</h4>
+<div class="card m-3 border-primary">
+    <h4 class="card-header text-bg-primary">Cronómetro</h4>
     <div class="card-body">
         @if(actividad == DESCANSANDO) {
-            <button class="btn btn-secondary align-middle position-absolute end-0 me-3 mt-2" type="button" (click)="aumentarTiempo(TIEMPO_ADICIONAL)">+{{ TIEMPO_ADICIONAL }} seg.</button>
+            <button class="btn align-middle position-absolute end-0 me-3 mt-2" type="button"
+                (click)="aumentarTiempo(TIEMPO_ADICIONAL)"
+                [class.btn-primary]="actividad != DESCANSANDO && !danger"
+                [class.btn-secondary]="actividad == DESCANSANDO && !danger"
+                [class.btn-danger]="danger"
+            >
+                +{{ TIEMPO_ADICIONAL }} seg.
+            </button>
         }
         <div class="d-grid gap-2">
-            @if (serie) {
+            @if (entEntrenamiento?.serie) {
                 <div class="text-center text-secondary">
-                    <p class="d-inline align-middle fs-1 fw-bold">N° {{ serie }}</p>
+                    <p class="d-inline align-middle fs-1 fw-bold">N° {{ entEntrenamiento?.serie }}</p>
                 </div>
             }
             <div class="overflow-hidden" [class.my-4]="actividad == PREENTRENO">
@@ -15,13 +22,20 @@
                 <img [src]="IMAGE_PATH_ENTRENANDO" class="mx-auto d-block img-fluid filtro-secondary" [class.d-none]="actividad == DESCANSANDO"/>
             </div>
             @if (this.timerToString()) {
-                <div class="text-center fw-bold text-primary fs-extra-large my-1">
+                <div class="text-center fw-bold fs-extra-large my-1"
+                    [class.text-primary]="actividad != DESCANSANDO && !danger"
+                    [class.text-secondary]="actividad == DESCANSANDO && !danger"
+                    [class.text-danger]="danger"
+                >
                     {{ this.timerToString() }}
                 </div>
             }
-            <button class="btn py-3 btn-lg fs-1 fw-bold" type="button"
-                [class]="actividad != DESCANSANDO ? 'btn-primary': 'btn-primary'"
-                (click)="cronometroClick()">
+            <button class="btn py-3 btn-lg fs-1 fw-bold btn-primary" type="button"
+                [class.btn-primary]="actividad != DESCANSANDO && !danger"
+                [class.btn-secondary]="actividad == DESCANSANDO && !danger"
+                [class.btn-danger]="danger"
+                (click)="cronometroClick()"
+            >
                 {{ (actividad == ENTRENANDO) ? 'Descansar': '¡Entrenar!' }}
             </button>
         </div>
