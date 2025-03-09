@@ -1,13 +1,9 @@
-import { NgOptimizedImage } from '@angular/common';
 import { Component } from '@angular/core';
 import { EntEntrenamiento } from '@models/ent-entrenamiento';
 import { EntrenamientoService } from '@services/mateo/entrenamiento.service';
 
 @Component({
   selector: 'app-cronometro',
-  imports: [
-    NgOptimizedImage
-  ],
   templateUrl: './cronometro.component.html',
   styleUrl: './cronometro.component.css'
 })
@@ -21,6 +17,8 @@ export class CronometroComponent {
 
     readonly IMAGE_PATH_DESCANSANDO: string = 'zzz.png';
     readonly IMAGE_PATH_ENTRENANDO: string = 'musculo.png';
+
+    readonly TIEMPO_ADICIONAL: number = 15;
 
     // Variables del estado del cronómetro
     actividad: string = this.PREENTRENO;
@@ -42,6 +40,26 @@ export class CronometroComponent {
         this.actividad = this.PREENTRENO;
         this.timer = undefined;
         this.deltaTimer = undefined;
+    }
+
+    aumentarTiempo(segundos: number) {
+        this.timer && (this.timer += segundos);
+
+        // Se vuelve a setear interval para que cambios en timer no sean tan abruptos visualmente...
+        if (this.interval != undefined) {
+            clearInterval(this.interval);
+            this.interval = undefined;
+        }
+
+        if (this.actividad != this.PREENTRENO) {
+            this.interval = setInterval(() => {
+                this.timer! += this.deltaTimer!;
+
+                if (this.timer! <= 0) {
+                    this.cronometroClick();
+                }
+            }, 1000);
+        }
     }
 
     cronometroClick() {
@@ -71,8 +89,6 @@ export class CronometroComponent {
                     console.error("Ocurrió un error al crear un nuevo entrenamiento: " + JSON.stringify(err));
                 }
             });
-
-            console.log(entEntrenamiento);
 
             // Se cambia el estado de entrenando...
             this.actividad = this.ENTRENANDO

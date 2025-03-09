@@ -1,6 +1,9 @@
 <div class="card m-3" [class]="actividad == DESCANSANDO ? 'border-secondary': 'border-primary'">
     <h4 class="card-header" [class]="actividad == DESCANSANDO ? 'text-bg-secondary': 'text-bg-primary'">Cronómetro</h4>
     <div class="card-body">
+        @if(actividad == DESCANSANDO) {
+            <button class="btn btn-secondary align-middle position-absolute end-0 me-3" type="button" (click)="aumentarTiempo(TIEMPO_ADICIONAL)">+{{ TIEMPO_ADICIONAL }} seg.</button>
+        }
         <div class="d-grid gap-2">
             @if (serie) {
                 <div class="text-center text-secondary">
