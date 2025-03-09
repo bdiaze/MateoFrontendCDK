@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Entrenamiento } from '../../../models/entrenamiento';
 import { DatePipe } from '@angular/common';
+import { Segundos } from '@helpers/segundos';
 
 @Component({
   selector: 'app-tarjeta-entrenamiento',
@@ -10,4 +11,8 @@ import { DatePipe } from '@angular/common';
 })
 export class TarjetaEntrenamientoComponent {
     @Input() entrenamiento!: Entrenamiento;
+
+    segundosATexto(segundos: number) {
+        return Segundos.segundosATexto(segundos);
+    }
 }
