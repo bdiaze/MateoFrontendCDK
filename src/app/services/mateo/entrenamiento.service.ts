@@ -26,18 +26,7 @@ export class EntrenamientoService {
     }
 
     crear(entEntrenamiento:EntEntrenamiento) {
-        let parametros:HttpParams = new HttpParams()
-        .set("idRequest", entEntrenamiento.idRequest)
-        .set("inicio", entEntrenamiento.inicio.toISOString())
-        .set("termino", entEntrenamiento.termino.toISOString())
-        .set("serie", entEntrenamiento.serie);
-
-        (entEntrenamiento.idTipoEjercicio) && parametros.set("idTipoEjercicio", entEntrenamiento.idTipoEjercicio!);
-        (entEntrenamiento.repeticiones) && parametros.set("repeticiones", entEntrenamiento.repeticiones!);
-        (entEntrenamiento.segundosEntrenamiento) && parametros.set("segundosEntrenamiento", entEntrenamiento.segundosEntrenamiento!);
-        (entEntrenamiento.segundosDescanso) && parametros.set("segundosDescanso", entEntrenamiento.segundosDescanso!);
-
-        return this.http.post(this.apiUrl + '/entrenamiento/crear', {params: parametros});
+        return this.http.post(this.apiUrl + '/entrenamiento/crear', entEntrenamiento);
     }
 }
 
