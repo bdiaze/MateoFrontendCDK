@@ -40,6 +40,7 @@ export class CronometroComponent {
         this.actividad = this.PREENTRENO;
         this.timer = undefined;
         this.deltaTimer = undefined;
+        this.imagePath = this.IMAGE_PATH_ENTRENANDO;
     }
 
     aumentarTiempo(segundos: number) {
@@ -112,7 +113,7 @@ export class CronometroComponent {
         } else if (this.actividad == this.PREENTRENO) {
             this.timer = undefined;
             this.deltaTimer = undefined;
-            this.imagePath = undefined;
+            this.imagePath = this.IMAGE_PATH_ENTRENANDO;
             this.guid = undefined;
         }
 

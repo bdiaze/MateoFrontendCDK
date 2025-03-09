@@ -1,3 +1,17 @@
 .fs-extra-large {
     font-size: calc(3.05rem + 1.5vw) !important;
 }
+
+image {
+    max-height: 10rem;
+}
+
+.filtro-primary {
+    filter: drop-shadow(0px 20rem 0 #0D6EFD);
+    transform: translateY(-20rem);
+}
+
+.filtro-secondary {
+    filter: drop-shadow(0px 20rem 0 #6C757D);
+    transform: translateY(-20rem);
+}

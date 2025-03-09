@@ -1,33 +1,27 @@
-<div class="card m-3" [class]="actividad == DESCANSANDO ? 'border-secondary': 'border-primary'">
-    <h4 class="card-header" [class]="actividad == DESCANSANDO ? 'text-bg-secondary': 'text-bg-primary'">Cronómetro</h4>
+<div class="card m-3" [class]="actividad == DESCANSANDO ? 'border-primary': 'border-primary'">
+    <h4 class="card-header" [class]="actividad == DESCANSANDO ? 'text-bg-primary': 'text-bg-primary'">Cronómetro</h4>
     <div class="card-body">
         @if(actividad == DESCANSANDO) {
-            <button class="btn btn-secondary align-middle position-absolute end-0 me-3" type="button" (click)="aumentarTiempo(TIEMPO_ADICIONAL)">+{{ TIEMPO_ADICIONAL }} seg.</button>
+            <button class="btn btn-secondary align-middle position-absolute end-0 me-3 mt-2" type="button" (click)="aumentarTiempo(TIEMPO_ADICIONAL)">+{{ TIEMPO_ADICIONAL }} seg.</button>
         }
         <div class="d-grid gap-2">
             @if (serie) {
                 <div class="text-center text-secondary">
-                    <!--<p class="d-inline align-middle fs-5 me-2">Serie</p>-->
-                    <p class="d-inline align-middle fs-3 fw-bold">N° {{ serie }}</p>
+                    <p class="d-inline align-middle fs-1 fw-bold">N° {{ serie }}</p>
                 </div>
             }
             @if (imagePath) {
-                <div>
-                    <img [src]="imagePath" class="mx-auto d-block img-thumbnail" loading="eager"/>
+                <div class="overflow-hidden">
+                    <img [src]="imagePath" class="mx-auto d-block img-fluid" [class]="actividad != DESCANSANDO ? 'filtro-secondary': 'filtro-secondary'" loading="eager"/>
                 </div>
             }
-            <div class="text-center fw-bold"
-                [class]="actividad == PREENTRENO ? 'fs-1 my-4': 'fs-extra-large my-1'"
-                [class.text-primary]="actividad != DESCANSANDO"
-                [class.text-secondary]="actividad == DESCANSANDO">
-                @if (!this.timerToString()) {
-                    ¡A Entrenar!
-                } @else {
+            @if (this.timerToString()) {
+                <div class="text-center fw-bold text-primary fs-extra-large my-1">
                     {{ this.timerToString() }}
-                }
-            </div>
-            <button class="btn py-3 btn-lg" type="button"
-                [class]="actividad != DESCANSANDO ? 'btn-primary': 'btn-secondary'"
+                </div>
+            }
+            <button class="btn py-3 btn-lg fs-1 fw-bold" type="button"
+                [class]="actividad != DESCANSANDO ? 'btn-primary': 'btn-primary'"
                 (click)="cronometroClick()">
                 {{ (actividad == ENTRENANDO) ? 'Descansar': '¡Entrenar!' }}
             </button>
