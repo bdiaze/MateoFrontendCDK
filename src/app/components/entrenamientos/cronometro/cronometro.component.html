@@ -10,11 +10,10 @@
                     <p class="d-inline align-middle fs-1 fw-bold">N° {{ serie }}</p>
                 </div>
             }
-            @if (imagePath) {
-                <div class="overflow-hidden">
-                    <img [src]="imagePath" class="mx-auto d-block img-fluid" [class]="actividad != DESCANSANDO ? 'filtro-secondary': 'filtro-secondary'" loading="eager"/>
-                </div>
-            }
+            <div class="overflow-hidden" [class.my-4]="actividad == PREENTRENO">
+                <img [src]="IMAGE_PATH_DESCANSANDO" class="mx-auto d-block img-fluid filtro-secondary" [class.d-none]="actividad != DESCANSANDO"/>
+                <img [src]="IMAGE_PATH_ENTRENANDO" class="mx-auto d-block img-fluid filtro-secondary" [class.d-none]="actividad == DESCANSANDO"/>
+            </div>
             @if (this.timerToString()) {
                 <div class="text-center fw-bold text-primary fs-extra-large my-1">
                     {{ this.timerToString() }}
