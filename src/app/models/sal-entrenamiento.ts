@@ -1,11 +1,11 @@
 import { Entrenamiento } from "./entrenamiento";
 
 export class SalEntrenamiento {
-    desde: Date | undefined;
-    hasta: Date | undefined;
-    pagina: number | undefined;
-    totalPaginas: number | undefined;
-    cantidadElementosPorPagina: number | undefined;
-    cantidadTotalEntrenamientos: number | undefined;
+    desde!: Date;
+    hasta!: Date;
+    pagina!: number;
+    totalPaginas!: number;
+    cantidadElementosPorPagina!: number;
+    cantidadTotalEntrenamientos!: number;
     entrenamientos: Entrenamiento[] | undefined;
 }

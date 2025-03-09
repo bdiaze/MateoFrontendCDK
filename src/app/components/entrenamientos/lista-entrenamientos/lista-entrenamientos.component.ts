@@ -5,6 +5,8 @@ import { TarjetaEntrenamientoComponent } from '../tarjeta-entrenamiento/tarjeta-
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
+import { EntrenamientosPorFecha } from '../../../models/entrenamientos-por-fecha';
+import { Entrenamiento } from '../../../models/entrenamiento';
 
 @Component({
   selector: 'app-lista-entrenamientos',
@@ -16,6 +18,10 @@ export class ListaEntrenamientosComponent {
     numPagina: number;
     cantElemPagina: number;
     cargando: boolean = true;
+    salEntrenamientos:SalEntrenamiento | undefined;
+    paginas: number[] | undefined;
+    entrenamientosPorFechas: EntrenamientosPorFecha[] | undefined;
+    ocurrioError: boolean = false;
 
     formBuilder = inject(NonNullableFormBuilder);
 
@@ -34,9 +40,6 @@ export class ListaEntrenamientosComponent {
         }),
     });
 
-    salEntrenamientos:SalEntrenamiento | undefined;
-    paginas: number[] | undefined;
-
     constructor(private entrenamientoService:EntrenamientoService) {
         // "Hasta": Fecha actual y "Desde": Día anterior...
         let hastaDate = new Date();
@@ -51,6 +54,11 @@ export class ListaEntrenamientosComponent {
         this.obtenerEntrenamientos();
     }
 
+    cambioDeFechasFiltro() {
+        this.numPagina = 1;
+        this.obtenerEntrenamientos();
+    }
+
     obtenerEntrenamientos() {
         if (this.desdeHastaForm.invalid) {
             return;
@@ -62,11 +70,49 @@ export class ListaEntrenamientosComponent {
         let desdeDate: Date = new Date(Date.UTC(parseInt(desdeArray[0]), parseInt(desdeArray[1]) - 1, parseInt(desdeArray[2])));
         let hastaDate: Date = new Date((new Date(Date.UTC(parseInt(hastaArray[0]), parseInt(hastaArray[1]) - 1, parseInt(hastaArray[2])))).getTime() + (1 * 24 * 60 * 60 * 1000));
         this.cargando = true;
+        this.ocurrioError = false;
         this.entrenamientoService.listar(desdeDate, hastaDate, this.numPagina, this.cantElemPagina)
-        .subscribe((response:SalEntrenamiento) => {
-            this.salEntrenamientos = response
-            this.paginas = new Array(this.salEntrenamientos.totalPaginas).fill(0).map((n, index) => index + 1);
-            this.cargando = false;
+        .subscribe({
+            next: (response:SalEntrenamiento) => {
+                this.salEntrenamientos = response
+                // Se crean las páginas necesarias...
+                this.paginas = new Array(this.salEntrenamientos.totalPaginas).fill(0).map((_, index) => index + 1);
+
+                // Se ordenan los entrenamientos según la fecha de inicio...
+                this.salEntrenamientos.entrenamientos = this.salEntrenamientos.entrenamientos?.sort((e1, e2) => {
+                    if (e1.inicio.getTime() > e2.inicio.getTime()) {
+                        return -1;
+                    } else if (e1.inicio.getTime() < e2.inicio.getTime()) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
+
+                this.entrenamientosPorFechas = [];
+                let fecha:Date | undefined = undefined;
+                this.salEntrenamientos.entrenamientos?.forEach((entrenamiento:Entrenamiento) => {
+                    let fechaTruncada:Date = new Date(entrenamiento.inicio.toDateString()!);
+                    if (fecha == undefined || fecha.getTime() != fechaTruncada.getTime()) {
+                        this.entrenamientosPorFechas!.push({
+                            dia: fechaTruncada,
+                            entrenamientos: []
+                        });
+                        fecha = fechaTruncada;
+                    }
+                    this.entrenamientosPorFechas![this.entrenamientosPorFechas!.length - 1].entrenamientos.push(entrenamiento);
+                });
+                console.log(this.entrenamientosPorFechas);
+
+                this.cargando = false;
+            },
+            error: (err) => {
+                console.error("Ocurrió un error al obtener el listado de entrenamientos: " + JSON.stringify(err));
+                this.salEntrenamientos = undefined;
+                this.paginas = undefined;
+                this.ocurrioError = true;
+                this.cargando = false;
+            }
         });
     }
 

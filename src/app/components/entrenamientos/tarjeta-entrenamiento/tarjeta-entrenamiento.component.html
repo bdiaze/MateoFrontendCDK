@@ -2,19 +2,33 @@
     <div class="accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#flush-collapse-' + entrenamiento.id" aria-expanded="false">
-                {{ entrenamiento.inicio | date : "dd MMM HH:mm" }}
-                @if (entrenamiento.serie) {
-                    - N° Serie: {{ entrenamiento.serie }}
-                }
-                @if (entrenamiento.repeticiones) {
-                    - Repetición: {{ entrenamiento.repeticiones }}
-                }
+                <div class="text-center w-100">
+                    <p class="d-inline position-absolute top-50 start-0 ms-5 translate-middle text-secondary">{{ entrenamiento.inicio | date : "HH:mm" }}</p>
+                    @if (entrenamiento.serie) {
+                        <p class="d-inline mx-3 fs-4 align-middle ps-4 text-primary fw-bold"> Serie {{ entrenamiento.serie }}</p>
+                    }
+                </div>
             </button>
         </h2>
         <div [id]="'flush-collapse-' + entrenamiento.id" class="accordion-collapse collapse">
-            <div class="accordion-body">
-                <h6>Entrenamiento: {{ entrenamiento.segundosEntrenamiento }} segundos</h6>
-                <p class="mb-0">Descanso: {{ entrenamiento.segundosDescanso }} segundos</p>
+            <div class="accordion-body p-1">
+                <table class="table text-center mb-0">
+                    @if (entrenamiento.repeticiones) {
+                        <caption class="text-center fs-5 pb-0 border-top">{{ entrenamiento.repeticiones }} repeticiones</caption>
+                    }
+                    <thead>
+                        <tr>
+                            <td class="fs-6 text-secondary">Entrenamiento</td>
+                            <td class="fs-6 text-secondary">Descanso</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fs-4 text-primary fw-bold border-bottom-0">{{ entrenamiento.segundosEntrenamiento }} seg.</td>
+                            <td class="fs-4 text-primary fw-bold border-bottom-0">{{ entrenamiento.segundosDescanso }} seg.</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

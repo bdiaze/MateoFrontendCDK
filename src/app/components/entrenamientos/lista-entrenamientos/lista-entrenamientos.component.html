@@ -3,25 +3,34 @@
     <div class="card-body">
         <form [formGroup]="desdeHastaForm">
             <div class="input-group">
-                <!--<span class="input-group-text">Desde</span>-->
-                <input type="date" class="form-control text-center" (input)="obtenerEntrenamientos()" [ngClass]="{'is-invalid': desdeHastaForm.controls['desde'].invalid}" placeholder="dd/mm/aaaa" formControlName="desde"/>
-                <input type="date" class="form-control text-center" (input)="obtenerEntrenamientos()" [ngClass]="{'is-invalid': desdeHastaForm.controls['hasta'].invalid}" placeholder="dd/mm/aaaa" formControlName="hasta"/>
-                <!--<span class="input-group-text">Hasta</span>-->
+                <input type="date" class="form-control text-center" (input)="cambioDeFechasFiltro()" [ngClass]="{'is-invalid': desdeHastaForm.controls['desde'].invalid}" placeholder="dd/mm/aaaa" formControlName="desde"/>
+                <input type="date" class="form-control text-center" (input)="cambioDeFechasFiltro()" [ngClass]="{'is-invalid': desdeHastaForm.controls['hasta'].invalid}" placeholder="dd/mm/aaaa" formControlName="hasta"/>
             </div>
         </form>
 
         @if (!cargando) {
-            <ul class="list-group list-group-flush my-2">
-                @for (entrenamiento of salEntrenamientos?.entrenamientos; track entrenamiento.id) {
-                    <li class="list-group-item">
-                        <app-tarjeta-entrenamiento [entrenamiento]="entrenamiento"></app-tarjeta-entrenamiento>
-                    </li>
+            @if (!ocurrioError) {
+                @for (entrenamientosPorFecha of entrenamientosPorFechas; track entrenamientosPorFecha.dia; let index = $index) {
+                    <div class="separator text-secondary border-secondary fw-bold mt-2">{{ entrenamientosPorFecha.dia | date : "dd MMMM" }}</div>
+                    <ul class="list-group list-group-flush">
+                        @for (entrenamiento of entrenamientosPorFecha.entrenamientos; track entrenamiento.id) {
+                            <li class="list-group-item py-0">
+                                <app-tarjeta-entrenamiento [entrenamiento]="entrenamiento"></app-tarjeta-entrenamiento>
+                            </li>
+                        }
+                    </ul>
                 } @empty {
-                    <li class="list-group-item text-center">Nada que mostrar...</li>
+                    <ul class="list-group list-group-flush mt-2">
+                        <li class="list-group-item text-center text-secondary fst-italic">Nada que mostrar...</li>
+                    </ul>
                 }
-            </ul>
+            } @else {
+                <ul class="list-group list-group-flush mt-2">
+                    <li class="list-group-item text-center text-danger">¡Ups! Parece que ocurrió un error al obtener tus entrenamientos...</li>
+                </ul>
+            }
         } @else {
-            <div class="d-flex justify-content-center text-primary my-4">
+            <div class="d-flex justify-content-center text-primary mt-4 mb-1">
                 <div class="spinner-border" role="status"></div>
                 <h4 class="mx-3 mt-1">Cargando...</h4>
             </div>
@@ -29,7 +38,7 @@
 
         @if (salEntrenamientos?.totalPaginas! > 1) {
             <nav aria-label="Páginas listado de entrenamientos">
-                <ul class="pagination justify-content-center mb-0">
+                <ul class="pagination justify-content-center mb-0 mt-2">
                     <li class="page-item">
                         <span class="page-link" aria-label="Anterior" (click)="cambiarPagina(numPagina - 1)">
                             <span aria-hidden="true"><</span>
