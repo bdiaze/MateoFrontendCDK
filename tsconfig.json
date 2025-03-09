@@ -3,6 +3,14 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@environments/*": ["./src/environments/*"],
+      "@components/*": ["./src/app/components/*"],
+      "@helpers/*": ["./src/app/helpers/*"],
+      "@models/*": ["./src/app/models/*"],
+      "@services/*": ["./src/app/services/*"],
+    },
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,
