@@ -46,7 +46,7 @@
                     </li>
                     @for (pagina of paginas; track pagina) {
                         <li class="page-item" [ngClass]="{'active': pagina == numPagina}">
-                            <span class="page-link" (click)="cambiarPagina(pagina)">{{ pagina }}</span>
+                            <span class="page-link" (click)="cambiarPagina(pagina)">{{ pagina > 0 ? pagina : '...' }}</span>
                         </li>
                     }
                     <li class="page-item">
