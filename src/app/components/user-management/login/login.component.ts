@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthError, SignInOutput } from 'aws-amplify/auth';
-import { CognitoService } from '../../../services/cognito/cognito.service';
+import { CognitoService } from '@services/cognito/cognito.service';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -57,7 +57,7 @@ export class LoginComponent {
     .then((content: SignInOutput) => {
       let nextStep:string = content.nextStep.signInStep;
       if (nextStep == 'DONE') {
-        this.router.navigate(['/listaentrenamientos']);
+        this.router.navigate(['/cronometro']);
       } else if (nextStep == 'CONFIRM_SIGN_UP') {
         this.router.navigate(['/accountverification', username]);
       }
@@ -88,7 +88,7 @@ export class LoginComponent {
     this.cognitoService.obtenerUsuarioActual()
     .then((session) => {
       this.sesionIniciada = true;
-      this.router.navigate(['/listaentrenamientos']);
+      this.router.navigate(['/cronometro']);
     })
     .catch((error) => {
       if (error instanceof AuthError) {
